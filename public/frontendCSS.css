@@ -1,0 +1,75 @@
+h1 {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 120px;
+    /* identical to box height */
+
+    color: #000000;
+}
+
+h3{
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 50px;
+    color: #000000;
+    margin-left:1rem;
+}
+
+.myCard{
+    background-color: #FFFFFF;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: auto;
+    border-color: #000000;
+    border-width: .1rem;
+    border-style: solid;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+ 
+main{
+    margin:auto;
+    max-width: 1280px;
+    padding: 2rem;
+}
+.container{
+    padding: 0rem;
+    
+}
+.row{
+    padding: 0.5rem;
+}
+
+.form-control{
+    border-radius: 0.25rem;
+    border-width: .1rem;
+    border-style: none;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    background-color: #E8E8E8;
+}
+
+.btn{
+    border-radius: 2rem;
+    margin: 0.25rem 1rem;
+    float: right;
+    width: 10rem;
+}
+
+.btn-primary{
+    background-color: #1B4A9B;
+    color: #FFFFFF;
+}
+
+.uploadlabel{
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+    color: #000000;
+    margin : 0.5 1rem;
+    padding: 0 1rem;
+}

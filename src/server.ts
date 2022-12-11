@@ -348,8 +348,24 @@ app.get('/updatebook/:book_isbn', async (req : Request, res: Response) => {
 // the field name for the pdf file and the image MUST be "pdf" and "image" respectively
 app.put('/updatebook/:book_isbn', upload.fields([{name: 'pdf'},{name:'image'}]), async (req : Request, res: Response) => {
     if (!req.session.admin || !req.session.user_id) {
+        res.status(403).send('this page is not for you friend');
+        return;
     }
-    //TODO
+    if (!req.files) {
+        res.status(400).send('bad request');
+        return;
+    }
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    
+    try {
+        await db.removeBook(Number(req.params.book_isbn));
+        const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
+        const book = await db.addBook(Number(isbn), title, req.session.user_id, String(isbn)+'.pdf', author, description, publisher, subject, language, String(isbn)+files['image'][0].originalname.split('.').pop(), release_date);
+        res.send(JSON.stringify(book));
+    } catch (error) {
+        console.log(error);
+        res.status(400).send('bad request');
+    }
 });
 
 

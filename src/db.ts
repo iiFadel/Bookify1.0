@@ -54,6 +54,12 @@ async function addBook(isbn: number, title: string, admin_id: number, pdfPath: s
     return await db.run(sql`INSERT INTO book (book_isbn, title, added_by, pdf, authors, description, publisher, subject, language, cover_photo, release_date) VALUES (${isbn}, ${title}, ${admin_id}, ${pdfPath}, ${authors}, ${description}, ${publisher}, ${subject}, ${language}, ${coverImagePath}, ${release_date})`);
 }
 
+// remove a book
+async function removeBook(isbn: number): Promise<sqlite.ISqlite.RunResult<sqlite3.Statement>> {
+    const db = await connectToDB();
+    return await db.run(sql`DELETE FROM book WHERE book_isbn = ${isbn}`);
+}
+
 // get multiple books by isbn
 async function getBooks(isbn: Array<number>): Promise<Array<any>> {
     const db = await connectToDB();
@@ -194,5 +200,6 @@ export default {
     getUserByEmail,
     getAdminByEmail,
     searchBook,
-    searchBookByTerm
+    searchBookByTerm,
+    removeBook
 }
