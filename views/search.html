@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Search Bookify{% endblock %}
+{% block title %}Login Bookify{% endblock %}
 {% block content %}
 <section class="search-section">
     <h1>Search</h1>
@@ -17,7 +17,7 @@
         <div class="container search-book-container">
             <div class="search-BookContainer">
                 <div class="search-BookimgContainer">
-                    <img class="search-book-preview-img" src="/cover/{{book.cover_photo}}" />
+                    <img class="search-book-preview-img" src="/image/{{book.image}}" />
                 </div>
                 <div class="search-book-info-card">
                     <h3 class="search-book-name"><strong>{{book.title}}</strong></h3>
@@ -26,9 +26,10 @@
                         <!-- <p class="search-book-pages">{{book.pages}} Pages</p> -->
                 </div>
                 <div class="search-right-side-card">
-                    <a href=""><img class="search-bookmark-icon" src="/images/icons/bookmark-icon-uncklicked.svg" alt="" /></a>
-                    <button class="search-view-button" onclick="location.href='/book/{{book.book_isbn}}'">View</button>
-                    <button class="search-read-button" onclick="location.href='/book/{{book.book_isbn}}'">Read</button>
+                    <button id="submit" type="submit" class="btn btn-primary btn-primary-login">
+                        <img class="search-bookmark-icon" src="/images/icons/bookmark-icon-uncklicked.svg" alt="" />                    </button>  
+                    <button class="search-view-button">View</button>
+                    <button class="search-read-button">Read</button>
                 </div>
             </div>
         </div>
