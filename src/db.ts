@@ -171,14 +171,13 @@ async function searchBook(isbn?: number, title?: string, author?: string, subjec
 // by term search
 async function searchBookByTerm(term: string): Promise<Array<any>> {
     const db = await connectToDB();
-    return await db.all(sql`SELECT book_isbn FROM book WHERE 
-                title LIKE '%${term}%'
-                OR authors LIKE '%${term}%'
-                OR subject LIKE '%${term}%'
-                OR language LIKE '%${term}%'
-                OR publisher LIKE '%${term}%'
-                OR description LIKE '%${term}%'
-                OR release_date LIKE '%${term}%'`);
+    return await db.all(sql`SELECT book_isbn FROM book WHERE title LIKE '%Room%'`);
+                // OR authors LIKE '%${term}%'
+                // OR subject LIKE '%${term}%'
+                // OR language LIKE '%${term}%'
+                // OR publisher LIKE '%${term}%'
+                // OR description LIKE '%${term}%'
+                // OR release_date LIKE '%${term}%'
 }
 export default {
     addUser,

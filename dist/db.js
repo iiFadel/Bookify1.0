@@ -208,14 +208,13 @@ function searchBook(isbn, title, author, subject, language, publisher, descripti
 function searchBookByTerm(term) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = yield connectToDB();
-        return yield db.all((0, sql_template_strings_1.default) `SELECT book_isbn FROM book WHERE 
-                title LIKE '%${term}%'
-                OR authors LIKE '%${term}%'
-                OR subject LIKE '%${term}%'
-                OR language LIKE '%${term}%'
-                OR publisher LIKE '%${term}%'
-                OR description LIKE '%${term}%'
-                OR release_date LIKE '%${term}%'`);
+        return yield db.all((0, sql_template_strings_1.default) `SELECT book_isbn FROM book WHERE title LIKE '%Room%'`);
+        // OR authors LIKE '%${term}%'
+        // OR subject LIKE '%${term}%'
+        // OR language LIKE '%${term}%'
+        // OR publisher LIKE '%${term}%'
+        // OR description LIKE '%${term}%'
+        // OR release_date LIKE '%${term}%'
     });
 }
 exports.default = {

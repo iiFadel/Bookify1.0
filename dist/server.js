@@ -156,7 +156,7 @@ app.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 app.get('/book/:book_isbn', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const book_isbn = Number(req.params.book_isbn);
     const book = yield db_1.default.getBooks([book_isbn]);
-    res.render('book.html', book[0]);
+    res.render('bookPage.html', book[0]);
 }));
 // get saved books page
 app.get('/bookmarks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -243,9 +243,13 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     var _l, _m;
     const searchTerm = req.body.term;
     if (searchTerm) {
+        console.log(searchTerm);
         const isbns = yield db_1.default.searchBookByTerm(searchTerm);
-        console.log(isbns);
-        const books = yield db_1.default.getBooks(isbns);
+        let arr = [];
+        for (let i = 0; i < isbns.length; i++) {
+            arr.push(isbns[i].book_isbn);
+        }
+        const books = yield db_1.default.getBooks(arr);
         res.render('search.html', { term: searchTerm, books: books, username: (_l = req.session) === null || _l === void 0 ? void 0 : _l.username, admin: (_m = req.session) === null || _m === void 0 ? void 0 : _m.admin });
     }
     else {

@@ -156,7 +156,7 @@ app.get('/logout', async (req: Request, res: Response) => {
 app.get('/book/:book_isbn', async (req: Request, res: Response) => {
     const book_isbn = Number(req.params.book_isbn);
     const book = await db.getBooks([book_isbn]);
-    res.render('book.html', book[0]);
+    res.render('bookPage.html', book[0]);
 });
 
 // get saved books page
@@ -181,6 +181,23 @@ app.get('/book/:book_isbn/reviews', async (req: Request, res: Response) => {
     const book_isbn = Number(req.params.book_isbn);
     const reviews = await db.getReviews(book_isbn);
     res.send(JSON.stringify(reviews));
+});
+
+// save a book
+app.post('/book/:book_isbn/save', async (req: Request, res: Response) => { 
+    if (req.session?.admin) {
+        res.status(403).send('Admins cannot save books');
+        return;
+    }
+    if (!req.session?.user_id) {
+        res.redirect('/login');
+        return;
+    }
+    const book_isbn = Number(req.params.book_isbn);
+    const user_id = req.session.user_id as number;
+
+    const saved = await db.addSavedBook(user_id, book_isbn);
+    res.render('success.html', {operation:"Book saved Successfully"});
 });
 
 // add a review about a book
@@ -250,8 +267,11 @@ app.post('/search', async (req: Request, res: Response) => {
     if (searchTerm) {
         console.log(searchTerm);
         const isbns = await db.searchBookByTerm(searchTerm);
-        console.log(isbns);
-        const books = await db.getBooks(isbns);
+        let arr : number[] = [];
+        for (let i = 0; i < isbns.length; i++) {
+            arr.push(isbns[i].book_isbn);
+        }
+        const books = await db.getBooks(arr);
         res.render('search.html', {term:searchTerm, books: books, username: req.session?.username, admin:req.session?.admin });
     } else {
         res.status(400).send('Bad request');
