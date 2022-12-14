@@ -1,0 +1,13 @@
+{% extends "layout.html" %} {% block title %}Bookmarks{% endblock %} {% block
+content %}
+<section class="read-book-section">
+  <h1>Read {{book.title}}</h1>
+  <div class="container read-book-container">
+    <iframe
+      src="../public/pdf/The-48-Laws-of-Power.pdf"
+      frameborder="0"
+      id="myPDF"
+    ></iframe>
+  </div>
+</section>
+{% endblock %}
