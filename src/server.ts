@@ -176,6 +176,13 @@ app.get('/bookmarks', async (req: Request, res: Response) => {
 
 });
 
+// read a book
+app.get('/book/:book_isbn/read', async (req: Request, res: Response) => {
+    const book_isbn = Number(req.params.book_isbn);
+    const book = await db.getBooks([book_isbn]);
+    res.render('read-book.html', book[0]);
+});
+
 // get reviews about a book
 app.get('/book/:book_isbn/reviews', async (req: Request, res: Response) => {
     const book_isbn = Number(req.params.book_isbn);
@@ -318,7 +325,7 @@ app.get('/requests', async (req: Request, res: Response) => {
         return;
     }
     const requests = await db.getRequests(req.body.status);
-    res.render('view_request.html', { requests, username: req.session.username, admin:req.session.admin});
+    res.render('view-request.html', { requests, username: req.session.username, admin:req.session.admin});
 });
 
 // admin update a request

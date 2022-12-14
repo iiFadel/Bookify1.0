@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-{% block title %}Login Bookify{% endblock %}
+{% block title %}Book Requests{% endblock %}
 {% block content %}
     <section class="view-request-section">
-      <h1>Book information</h1>
+      <h1>Book Requests</h1>
       <div class="view-request-container">
         <div class="reques-card"></div>
 
@@ -14,7 +14,7 @@
           </h5>
           <h5>
             <strong>Author: </strong>
-            <span><h6 class="view-request-h6">{{request.author}}</h6></span>
+            <span><h6 class="view-request-h6">{{request.authors}}</h6></span>
           </h5>
           <h5>
             <strong>ISBN-10: </strong>
