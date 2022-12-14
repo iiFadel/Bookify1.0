@@ -14,20 +14,24 @@
                             <h1>Creat an account</h1>
                             <p>Start your reading journey with us today!</p>
                             <form class="requires-validation" novalidate>
-                                <div class="col-md-12">
-                                    <label class="input-label" for="name">Name <span>*</span></label>
-                                    <input class="form-control" type="text" name="name"
-                                        placeholder="Enter your full name" required />
+                                {% if errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    <ul>
+                                        {% for error in errors %}
+                                        <li>{{error.msg}}</li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
+                                {% endif %}
                                 <div class="col-md-12">
                                     <label class="input-label" for="username">Username <span>*</span></label>
-                                    <input class="form-control" type="text" name="username"
+                                    <input class="form-control" type="text" name="username" value="{{username}}"
                                         placeholder="Enter an username" required />
                                 </div>
                                 <div class="col-md-12">
                                     <label class="input-label" for="email">Email <span>*</span></label>
                                     <input class="form-control" type="email" name="email" placeholder="Enter your email"
-                                        required />
+                                    value="{{email}}" required />
                                 </div>
                                 <div class="col-md-12">
                                     <label class="input-label" for="password">Password <span>*</span></label>

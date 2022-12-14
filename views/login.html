@@ -14,9 +14,16 @@
                             <h1>Welcome back</h1>
                             <p>Welcome back! Please enter your details</p>
                             <form class="requires-validation" novalidate>
+                                {% if errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    <ul>
+                                        <li>{{error}}</li>
+                                    </ul>
+                                </div>
+                                {% endif %}
                                 <div class="col-md-12">
                                     <input class="form-control" type="text" name="username" placeholder="Username"
-                                        required />
+                                        value="{{username}}" required />
                                 </div>
                                 <div class="col-md-12">
                                     <input class="form-control" type="password" name="password" placeholder="Password"

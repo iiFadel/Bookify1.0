@@ -7,34 +7,32 @@
         <div class="container book-container">
             <div class="BookContainer">
                 <div class="BookimgContainer">
-                    <img class="book-preview-img" src="../public/images/books-imgs/The-48-Laws-of-Power.jpg" />
+                    <img class="book-preview-img" src="../public/cover/{{cover_photo}}" />
                     <div class="UnderBook">
                         <img class="Bookmarkimg" src="../public/images/icons/bookmarkicon.png" />
-                        <button class="buttonRead">Read Now</button>
+                        <button class="buttonRead">Read Now</button> <!-- TODO add a link to the book -->
                     </div>
                 </div>
                 <div class="book-info-card">
-                    <h3 class="book-name"><strong>The 48 Laws of Power</strong></h3>
-                    <h6 class="book-author"><strong>By Robert Greene</strong></h4>
-                        <h6 class="book-isbn"><strong>ISBN-10: </strong>0140280197</h6>
+                    <h3 class="book-name"><strong>{{title}}</strong></h3>
+                    <h6 class="book-author"><strong>By {{authors}}</strong></h4>
+                        <h6 class="book-isbn"><strong>ISBN-10: </strong>{{book_isbn}}</h6>
 
                         <div class="book-details">
                             <div class="info01">
                                 Published<br />
-                                <span class="underinfo01">1998</span>
+                                <span class="underinfo01">{{release_date}}</span>
                             </div>
                             <div class="info02">
-                                Pages<br /><span class="underinfo02">480</span>
+                                Subject<br /><span class="underinfo02">{{subject}}</span>
                             </div>
                             <div class="info03">
-                                Language<br /><span class="underinfo03">English</span>
+                                Language<br /><span class="underinfo03">{{language}}</span>
                             </div>
+                            <!-- ?? we can add publisher too -->
                         </div>
                         <p>
-                            The 48 Laws Of Power draws on many of history's most famous
-                            power quarrels to show you what power looks like. how you can
-                            get it. what to do to defend yourself against the power of
-                            others and, most importantly, how to use it well and keep it.
+                            {{description}}
                         </p>
                 </div>
             </div>

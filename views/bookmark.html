@@ -4,35 +4,25 @@
 <section class="bookmark-section">
     <h1>Bookmark</h1>
     <div class="bookmark-container mx-auto mt-4">
+        <!-- ?? all books are placed in one row :) -->
         <div class="row">
+            {% for book in books %}
             <div class="col-md-4">
                 <div class="card" style="width: 18rem">
-                    <img src="../public/images/books-imgs/The-48-Laws-of-Power.jpg" class="card-img-top" alt="..." />
+                    <img src="../public/image{{book.cover_photo}}" class="card-img-top" alt="book cover" />
                     <div class="card-body">
-                        <h5 class="card-title">The 48 Laws of Power</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">By Robert Greene</h6>
+                        <h5 class="card-title">{{book.title}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">By {{book.authors}}</h6>
                         <div class="button-card-container">
-                            <a href=""><img class="bookmark-icon" src="../public/images/icons/bookmarkicon.png"
-                                    alt="" /></a>
+                            <a href=""><img class="bookmark-icon" src="../public/images/icons/bookmarkicon.png" 
+                                    alt="remove bookmark" /></a> <!-- todo -->
                             <button class="view-button">View</button><button class="read-button">Read</button>
+                            
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card" style="width: 18rem">
-                    <img src="../public/images/books-imgs/unwinding-anxiety.jpg" class="card-img-top" alt="..." />
-                    <div class="card-body">
-                        <h5 class="card-title">Unwinding Anxiety</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">By Judson Brewer</h6>
-                        <div class="button-card-container">
-                            <a href=""><img class="bookmark-icon" src="../public/images/icons/bookmarkicon.png"
-                                    alt="" /></a>
-                            <button class="view-button">View</button><button class="read-button">Read</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
