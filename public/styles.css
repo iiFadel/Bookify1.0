@@ -17,8 +17,11 @@ a{
     color: inherit;
 }
 
-/*************************************/
-/*************************************/
+/*************************************
+*************************************
+            index css
+*************************************
+*************************************/
 /* Navbar */
 .navbar-brand{
     margin-right: 3rem;
@@ -349,7 +352,7 @@ top: -8rem;
   align-items: center;
 }
 
-.form-content .form-items {
+.form-content .form-items-index {
   border: 1px solid black;
   padding: 3rem;
   display: inline-block;
@@ -465,3 +468,889 @@ top: -8rem;
     color: white;
     font-size: smaller;
 }
+
+/*************************************
+*************************************
+            Log in css
+*************************************
+*************************************/
+:root{
+    --primary-blue-color: #1B4A9B;
+    --primary-light-brown-color: #F5EBE0;
+    --primary-bc-color: #FEF9F7;
+  }
+  body{
+    background-color: #FEF9F7;
+    font-family: 'Lexend', sans-serif;
+  }
+  
+  .register-container{
+    margin-bottom: 3rem;
+  
+    max-width:1300px;
+  }
+  
+  
+  .register-pattern-side {
+    width: 50%;
+    border-top: 1px solid black; 
+    border-right: 1px solid black; 
+    border-bottom: 1px solid black; 
+    border-bottom-right-radius: 3rem; 
+    border-top-right-radius: 3rem; 
+  
+  
+  }.register-pattern-side img{
+    width: 100%;
+    height: 100%;object-fit: cover;
+    border-bottom-right-radius: 3rem; 
+    border-top-right-radius: 3rem; 
+  
+  }
+  
+  .register-form-holder{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .bookify-logo-register{
+    margin: 3rem;
+  }
+  .register-form-holder .form-content {
+    background-color: var(--primary-bc-color);
+    border-radius: 10px;
+  position: relative;
+  text-align: center;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  }
+  
+  .register-form-content .form-items {
+  padding: 3rem;
+  display: inline-block;
+  width: 100%;
+  min-width: 540px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  text-align: left;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  }
+  
+  .register-form-content label, .was-validated .form-check-input:invalid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label{
+  color: black;
+  font-size:1rem;
+  }
+  .register-form-content label span{
+    color: red;
+  }
+  .register-form-content input[type=text],.register-form-content input[type=password],.register-form-content input[type=email], .register-form-content select {
+  width: 100%;
+  padding: 5px 20px;
+  text-align: left;
+  outline: 0px;
+  border: 2px solid gray;
+  border-radius: 0.5rem;
+  background-color: white;
+  font-size: 15px;
+  font-weight: 300;
+  color: black;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  margin-bottom: 16px;
+  }
+  
+  .register-btn-primary{
+  background-color: var(--primary-blue-color);
+  outline: none;
+  border: 0px;
+  box-shadow: none;
+  width: 100%;
+  font-size: 15px;
+  margin-bottom: 1rem;
+  }
+  
+  .register-btn-primary:hover, .register-btn-primary:focus, .register-btn-primary:active{
+  background-color: #071a3b;
+  outline: none !important;
+  border: none !important;
+   box-shadow: none;
+  }
+  
+  .mv-up{
+  margin-top: -9px !important;
+  margin-bottom: 8px !important;
+  }
+  
+  .invalid-feedback{
+  color: #ff606e;
+  }
+  
+  .valid-feedback{
+  color: #2acc80;
+  }
+  .register-form-items p{
+    font-weight: 200;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  .register-form-items>p{
+    font-weight: 200;
+    text-align: left;
+  }
+  .register-form-items>h1{
+    font-weight: 700;
+    font-size: 3rem;
+  }
+  
+  .register-form-items p>strong{
+    font-weight: 500;
+    color:#071a3b;
+  }
+  
+  .bookify-logo-register{
+    width: 10rem;
+  }
+  .register-form-side{
+    width: 50%;
+    border-top: 1px solid black; 
+    border-left: 1px solid black; 
+    border-bottom: 1px solid black; 
+    border-bottom-left-radius: 3rem; 
+    border-top-left-radius: 3rem; }
+  
+/*************************************
+*************************************
+            Register css
+*************************************
+*************************************/
+  
+  .login-container{
+    margin-bottom: 3rem;
+  
+    max-width:1300px;
+    max-height:700px;
+  }
+  
+  
+  .login-container {
+    display: flex;
+    flex-direction: row;  
+  
+  }
+  
+  .login-form-side {
+    text-align: left; 
+    border-top: 1px solid black; 
+    border-left: 1px solid black; 
+    border-bottom: 1px solid black;
+    border-bottom-left-radius: 3rem; 
+    border-top-left-radius: 3rem; 
+  }
+  
+  .login-pattern-side {
+    width: 50%;
+    border-top: 1px solid black; 
+    border-right: 1px solid black; 
+    border-bottom: 1px solid black; 
+    border-bottom-right-radius: 3rem; 
+    border-top-right-radius: 3rem; 
+  
+  
+  }.login-pattern-side img{
+    width: 100%;
+    height: 100%;object-fit: cover;
+    border-bottom-right-radius: 3rem; 
+    border-top-right-radius: 3rem; 
+  }
+  
+  .form-holder-login {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .bookify-logo-login{
+    margin: 3rem;
+  }
+  .form-holder-login .form-content {
+    background-color: var(--primary-bc-color);
+    border-radius: 10px;
+  position: relative;
+  text-align: center;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  }
+  
+  .form-content-login .form-items {
+  padding: 3rem;
+  display: inline-block;
+  width: 100%;
+  min-width: 540px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  text-align: left;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  }
+  
+  .form-content-login label, .was-validated .form-check-input:invalid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label{
+  color: #fff;
+  }
+  
+  .form-content-login input[type=text],.form-content-login input[type=password],.form-content-login input[type=email], .form-content-login select {
+  width: 100%;
+  padding: 9px 20px;
+  text-align: left;
+  outline: 0px;
+  border: 0;
+  border-bottom: 2px solid gray;
+  border-radius: 0px;
+  background-color: var(--primary-bc-color);
+  font-size: 15px;
+  font-weight: 300;
+  color: black;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  font-size: 20px;
+  }
+  
+  .btn-primary-login{
+  background-color: var(--primary-blue-color);
+  outline: none;
+  border: 0px;
+  box-shadow: none;
+  width: 100%;
+  font-size: 25px;
+  margin-bottom: 1rem;
+  }
+  
+  .btn-primary-login:hover, .btn-primary:focus, .btn-primary:active{
+  background-color: #071a3b;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none;
+  }
+  
+  .mv-up{
+  margin-top: -9px !important;
+  margin-bottom: 8px !important;
+  }
+  
+  .invalid-feedback{
+  color: #ff606e;
+  }
+  
+  .valid-feedback{
+  color: #2acc80;
+  }
+  .form-items-login p{
+    font-weight: 200;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  .form-items-login>p{
+    font-weight: 200;
+    margin-bottom: 3rem;
+    text-align: left;
+  }
+  .form-items-login>h1{
+    font-weight: 700;
+    font-size: 3rem;
+  }
+  
+  .form-items-login p>strong{
+    font-weight: 500;
+    color:#071a3b;
+  }
+  
+  .bookify-logo-login{
+    width: 10rem;
+  }
+  
+  
+  /*************************************
+*************************************
+            bookPage css
+*************************************
+*************************************/
+  
+  .bold{
+    font-weight: bold;
+  }
+  
+  .view-book-container {
+    background-color: #fff;
+    border: 1px solid black;
+    padding: 1rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    border-radius: 1rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    
+  }
+  .view-book-preview-img{
+  width: 10rem;
+  border-radius: 1rem;
+  }
+  .view-BookContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-right: 0.5em;
+  }
+  
+  .view-BookimgContainer {
+    margin-right: 0.5em;
+  }
+  
+  .view-Bookimg {  
+    width: 9em;
+    height: 13em;
+    object-fit: cover;
+    border-radius: 0.5em;
+  
+  }
+  
+  .view-UnderBook{
+    display: block;
+  }
+  
+  .view-Bookmarkimg {
+    margin-top: 0.8em;
+    margin-right: 0.75em;
+    margin-left: 0.25em;
+    width: 1.5em;
+    height: 1.5em;
+    
+  }
+  
+  .view-buttonRead{
+    background-color:rgba(7,72,166,255);
+    color: white;
+    border: none;
+    margin-top: 0.75em;
+    height: 2.5em;
+    width: 8em;
+    border-radius: 8px;
+    border-radius: 18px;
+    font-size: 13px;
+    cursor: pointer;
+    
+    transition: background-color 0.15s,
+      color 0.15s;
+  
+    float: right;
+    margin-left: -50%;
+  
+  }
+  
+  .view-Book {
+    flex: 1;
+    margin-top: 2em;
+    margin-left: 0.5em;
+  }
+  
+  
+  .view-Bookinfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5em;
+  }
+  
+  .view-Auther {
+    font-size: 1em;
+    margin-top: 0.25em;
+    margin-left: 0.1em;
+    font-weight: bold;
+  }
+  
+  .view-ISBN {
+    font-size: 14px;
+    color: rgb(120, 120, 120);
+  }
+  
+  
+  
+  .view-underinfo01{
+    text-align: center;
+    margin-left: 1em;
+  }
+  
+  .view-underinfo02{
+    text-align: center;
+    margin-left: 0.5em;
+  }
+  
+  .view-underinfo03{
+    text-align: center;
+    margin-left: 0.6em;
+  }
+  
+  .view-BookDes {
+  color: black;  
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 1em;
+  }
+  
+  .view-info-section{
+    margin: 5rem 5%;
+  }
+  
+  .view-info-section h1{
+    font-size: 70px;
+    border-bottom: 3px solid gray;
+  }
+  
+  .view-book-author,.view-book-isbn{
+    display: inline;
+  }
+  .view-book-isbn{
+    float: right;
+  }
+  .view-book-info-card{
+    margin-left: 1rem;
+  
+  }
+  
+  .view-book-details{
+    width: 100%;
+    display: block;
+    position: relative;
+    font-weight: bold;
+    background-color: rgba(212, 206, 206, 0.5);
+    border-radius: 4px;
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: 33% 34% 33%;
+    align-self: center;
+  }
+  
+  .info01{
+    text-align: center;
+    display: inline-block;
+    font-size: 13px;
+    text-decoration: underline;
+    align-self: center;
+    grid-template-columns: auto;
+  }
+  
+  .info02{
+    text-align: center;
+    display: inline-block;
+    font-size: 13px;
+    text-decoration: underline;
+  }
+  
+  .info03{
+    text-align: center;
+    display: inline-block;
+    font-size: 13px;
+    text-decoration: underline;
+    margin-right: 1em;
+  }
+  
+/*************************************
+*************************************
+            bookmark css
+*************************************
+*************************************/
+  :root{
+    --primary-blue-color: #1B4A9B;
+    --primary-light-brown-color: #F5EBE0;
+  }
+  .bookmark-content{
+    border-radius: 0;
+  }
+  .bookmark-card-img-top {
+    width: 100%;
+    height: 15rem;
+    object-fit: cover;
+    border-radius: 1.5rem !important;
+  }
+  .bookmark-icon{
+    width: 2rem;
+    float: left;
+  }
+  
+  .bookmark-button-card-container{
+    text-align: right;
+  
+  }
+  .bookmark-card{
+    border-radius: 1.5rem !important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) !important;
+  
+  }
+  .bookmark-view-button {
+    background-color: white;
+    border-color: var(--primary-blue-color);
+    color: var(--primary-blue-color);
+    border: solid;
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: 10rem;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s,
+      color 0.15s;
+  }
+  .bookmark-view-button:hover {
+    background-color:  var(--primary-blue-color);
+    color: white;
+  }
+  
+  .bookmark-view-button:active {
+    opacity: 0.7;
+  }
+  
+  
+  .bookmark-read-button {
+    background-color:var(--primary-blue-color);
+    color: white;
+    border: none;
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: 10rem;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 0 0.25rem 1rem;
+  
+    transition: background-color 0.15s,
+      color 0.15s;
+  }
+  .bookmark-read-button:hover {
+    background-color: white;
+    color: var(--primary-blue-color);
+    border: solid;
+    border-color: var(--primary-blue-color);
+  }
+  
+  
+  .bookmark-read-button:active {
+    opacity: 0.7;
+  }
+  .bookmark-section h1{
+    font-size: 70px;
+    border-bottom: 3px solid gray;
+  }
+  .bookmark-section{
+  margin: 5rem 5%;
+  }
+  
+/*************************************
+*************************************
+            Add book css
+*************************************
+*************************************/
+  
+  :root{
+    --primary-blue-color: #1B4A9B;
+    --primary-light-brown-color: #F5EBE0;
+  }
+  
+  .add-book-button-container{
+    text-align: right;
+  }
+  .add-book-section{
+    margin: 5rem 5%;
+  }
+  
+  .add-book-section h1{
+    font-size: 70px;
+    border-bottom: 3px solid gray;
+  }
+  
+
+/*************************************
+*************************************
+            User request css
+*************************************
+*************************************/
+  .user-request-section{
+    margin: 5rem 5%;
+  }
+  
+  .user-request-section h1{
+    font-size: 70px;
+    border-bottom: 3px solid gray;
+  }
+  
+  
+  h6{
+    display: inline;
+  }
+  
+  
+  /*************************************
+*************************************
+            view-request css
+*************************************
+*************************************/
+  :root{
+    --primary-blue-color: #1B4A9B;
+    --primary-light-brown-color: #F5EBE0;
+  }
+  .view-request-card {
+    padding: 1rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    border: 1px solid black;
+    border-radius: 1rem;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+  }
+  .view-request-button-container{
+    text-align: right;
+  }
+  .view-request-reject-button {
+    background-color: white;
+    border-color: rgb(169, 16, 16);
+    color: rgb(169, 16, 16);
+    border: solid;
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: 10rem;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s,
+      color 0.15s;
+  }
+  .view-request-reject-button:hover {
+    background-color:  rgb(169, 16, 16);
+    color: white;
+  }
+  
+  .view-request-reject-button:active {
+    opacity: 0.7;
+  }
+  
+  
+  .view-request-add-button {
+    background-color:var(--primary-blue-color);
+    color: white;
+    border: none;
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: 10rem;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 0 0.25rem 1rem;
+  
+    transition: background-color 0.15s,
+      color 0.15s;
+  }
+  .view-request-add-button:hover {
+    background-color: white;
+    color: var(--primary-blue-color);
+    border: solid;
+    border-color: var(--primary-blue-color);
+  }
+  
+  
+  .view-request-add-button:active {
+    opacity: 0.7;
+  }
+  
+  .view-request-section{
+    margin: 5rem 5%;
+  }
+  
+  .view-request-section h1{
+    font-size: 70px;
+    border-bottom: 3px solid gray;
+  }
+  
+  
+  .view-request-h6{
+    display: inline;
+  }
+  
+  
+/*************************************
+*************************************
+            search css
+*************************************
+*************************************/
+  .search-book-container {
+    background-color: #fff;
+    border: 1px solid black;
+    padding: 1rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    border-radius: 1rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    
+  }
+  
+  .search-BookContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 0.5em;
+  }
+  
+  .search-BookimgContainer {
+    margin-right: 0.5em;
+  }
+  
+  .search-book-preview-img{
+    width: 7rem;
+    border-radius: 1rem;
+    }
+  
+    .search-Bookmarkimg {
+      margin-top: 0.8em;
+      margin-right: 0.75em;
+      margin-left: 0.25em;
+      width: 1.5em;
+      height: 1.5em;
+      object-fit: cover;
+      }
+    
+    .search-book-author,.search-book-isbn{
+      display: inline;
+    }
+    .search-book-isbn{
+      float: right;
+    }
+    .search-book-info-card{
+      margin-left: 1rem;
+    
+    }
+  
+  .search-book-details{
+    width: 100%;
+    display: block;
+    position: relative;
+    font-weight: bold;
+    background-color: rgba(212, 206, 206, 0.5);
+    border-radius: 4px;
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: 33% 34% 33%;
+    align-self: center;
+  }
+  
+  .search-book-publish{
+    font-size: 0.8rem;
+    color: gray;
+    opacity: 0.6;
+    margin-top: 0.5rem;
+  }
+  
+  
+  
+  .search-view-button {
+    background-color: white;
+    border-color: var(--primary-blue-color);
+    color: var(--primary-blue-color);
+    border: solid;
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: 10rem;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s,
+      color 0.15s;
+  }
+  .search-view-button:hover {
+    background-color:  var(--primary-blue-color);
+    color: white;
+  }
+  
+  .search-view-button:active {
+    opacity: 0.7;
+  }
+  
+  
+  .search-read-button {
+    background-color:var(--primary-blue-color);
+    color: white;
+    border: none;
+    height: 2.5rem;
+    width: 5rem;
+    border-radius: 10rem;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 0 0.25rem 1rem;
+  
+    transition: background-color 0.15s,
+      color 0.15s;
+  }
+  .search-read-button:hover {
+    background-color: white;
+    color: var(--primary-blue-color);
+    border: solid;
+    border-color: var(--primary-blue-color);
+  }
+  
+  
+  .search-read-button:active {
+    opacity: 0.7;
+  }
+  
+  .search-bookmark-icon{
+    width: 2rem;
+    vertical-align: top;
+
+  }
+  .search-right-side-card>a{
+    display: block;
+    text-align: right;
+    margin-bottom: 4rem;
+  }
+  .search-right-side-card{
+    text-align: right;
+    margin-left: auto;
+  
+  }
+  
+  .search-search-bar{
+    border: 1px solid black !important;
+    padding: 10rem 0;
+  }
+  
+  .search-btn.form-control.submit-button.p-3{
+    padding: 0.4rem !important;
+    margin-top: 0;
+  }
+  
+  .search-results-container{
+    margin-top: 1rem;
+  }
+  .search-section{
+    margin: 5rem 5%;
+  }
+  
+  .search-section h1{
+    font-size: 70px;
+    border-bottom: 3px solid gray;
+  }
+  
+  
+  .search-book-author{
+    display: inline;
+  }
