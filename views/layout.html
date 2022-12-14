@@ -1,123 +1,136 @@
-{% extends "base.html" %}
-{% block body %}
-    <nav class="navbar navbar-expand-lg py-4">
-      <div class="container-fluid">
-        <a href="/" class="navbar-brand">
+{% extends "base.html" %} {% block body %}
+<nav class="navbar navbar-expand-lg py-4">
+  <div class="container-fluid">
+    <a href="/" class="navbar-brand">
+      <img
+        class="bookify-nav-logo"
+        src="/images/bookify-logo/Bookify-logo.png"
+        alt="Bookify Logo"
+      />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navmenu"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a href="/" class="nav-link">HOME</a>
+        </li>
+        <li class="nav-item">
+          {% if admin %}
+          <a href="/requests" class="nav-link">REQUESTS</a>
+          {% else %}
+          <a href="/bookmarks" class="nav-link">BOOKMARK</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          {% if admin %}
+          <a href="/addbook" class="nav-link">ADD BOOK</a>
+          {% else %}
+          <a href="/request" class="nav-link">REQUEST</a>
+          {% endif %}
+        </li>
+      </ul>
+      <form
+        class="d-flex me-4 ms-4"
+        method="post"
+        action="/search"
+        role="search"
+      >
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+      </form>
+      <button
+        class="btn log-in-btn-nav pe-4 ps-4"
+        onclick="location.href='/login'"
+      >
+        LOG IN
+      </button>
+    </div>
+  </div>
+</nav>
+
+{% block content %} This is default content {% endblock %}
+
+<!-- Footer-->
+<section class="footer p-5 text-light text-center position-relative">
+  <div class="container">
+    <div class="d-sm-flex justify-content-between">
+      <div class="foot-l d-sm-block">
+        <a href="/">
           <img
-            class="bookify-nav-logo"
-            src="/images/bookify-logo/Bookify-logo.png"
-            alt="Bookify Logo"
+            class="footer-logo"
+            src="/images/bookify-logo/logofy-log-white.png"
+            alt=""
+          />
+          <img
+            class="footer-logo-text"
+            src="/images/bookify-logo/logofy-white.png"
+            alt=""
           />
         </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navmenu"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a href="/" class="nav-link">HOME</a>
-            </li>
-            <li class="nav-item">
-              <a href="/bookmarks" class="nav-link">BOOKMARK</a>
-            </li>
-            <li class="nav-item">
-              <a href="/request" class="nav-link">REQUEST</a>
-            </li>
-          </ul>
-          <form class="d-flex me-4 ms-4" method="post" action="/search" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-          </form>
-          <button class="btn log-in-btn-nav pe-4 ps-4" onclick="location.href='/login'">
-            LOG IN
-          </button>
-        </div>
+        <p>
+          Bookify is an online library that brings you books from all over the
+          world and lets you enjoy them.
+        </p>
       </div>
-    </nav>
-    
-    {% block content %}
-    This is default content
-    {% endblock %}
-
-    <!-- Footer-->
-    <section class="footer p-5 text-light text-center position-relative">
-      <div class="container">
-        <div class="d-sm-flex justify-content-between">
-          <div class="foot-l d-sm-block">
-            <a href="/">
-              <img
-                class="footer-logo"
-                src="/images/bookify-logo/logofy-log-white.png"
-                alt=""
-              />
-              <img
-                class="footer-logo-text"
-                src="/images/bookify-logo/logofy-white.png"
-                alt=""
-              />
-            </a>
-            <p>
-              Bookify is an online library that brings you books from all over
-              the world and lets you enjoy them.
-            </p>
-          </div>
-          <div class="foot-m d-sm-block">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/">Books</a></li>
-              <li><a href="/">Request</a></li>
-              <li><a href="/">About us</a></li>
-            </ul>
-          </div>
-          <div class="foot-r d-sm-block">
-            <h3>Follow us on Links</h3>
-            <a href="/">
-              <img
-                class="follow-us-img"
-                src="/images/svgs/facebook-icon.svg"
-                alt=""
-              />
-            </a>
-            <a href="/">
-              <img
-                class="follow-us-img"
-                src="/images/svgs/instagram-icon.svg"
-                alt=""
-              />
-            </a>
-            <a href="/">
-              <img
-                class="follow-us-img"
-                src="/images/svgs/twitter-icon.svg"
-                alt=""
-              />
-            </a>
-            <a href="/">
-              <img
-                class="follow-us-img"
-                src="/images/svgs/github-icon.svg"
-                alt=""
-              />
-            </a>
-          </div>
-        </div>
+      <div class="foot-m d-sm-block">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/">Books</a></li>
+          <li><a href="/">Request</a></li>
+          <li><a href="/">About us</a></li>
+        </ul>
       </div>
-    </section>
-    <!-- Footer-->
-    <footer class="p-3 footer-copyright">
-      <div class="container">
-        <p>Copyright &copy; 2022 Bookify - All right reserved</p>
+      <div class="foot-r d-sm-block">
+        <h3>Follow us on Links</h3>
+        <a href="/">
+          <img
+            class="follow-us-img"
+            src="/images/svgs/facebook-icon.svg"
+            alt=""
+          />
+        </a>
+        <a href="/">
+          <img
+            class="follow-us-img"
+            src="/images/svgs/instagram-icon.svg"
+            alt=""
+          />
+        </a>
+        <a href="/">
+          <img
+            class="follow-us-img"
+            src="/images/svgs/twitter-icon.svg"
+            alt=""
+          />
+        </a>
+        <a href="/">
+          <img
+            class="follow-us-img"
+            src="/images/svgs/github-icon.svg"
+            alt=""
+          />
+        </a>
       </div>
-    </footer>
+    </div>
+  </div>
+</section>
+<!-- Footer-->
+<footer class="p-3 footer-copyright">
+  <div class="container">
+    <p>Copyright &copy; 2022 Bookify - All right reserved</p>
+  </div>
+</footer>
 
 {% endblock %}
