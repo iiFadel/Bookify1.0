@@ -103,7 +103,7 @@ async function getReviews(book_isbn: number): Promise<Array<any>> {
 // add a book request
 async function addRequest(user_id: number, title: string, isbn:number, author?:string): Promise<sqlite.ISqlite.RunResult<sqlite3.Statement>> {
     const db = await connectToDB();
-    return await db.run(sql`INSERT INTO book_request (title, isbn, authors, submitted_by, updated_by, status) VALUES (${title}, ${author}, ${null}, 'pending')`);
+    return await db.run(sql`INSERT INTO book_request (title, isbn, authors, submitted_by, updated_by, status) VALUES (${title}, ${isbn}, ${author}, ${user_id}, ${null}, 'pending')`);
 }
 
 // get book requests 

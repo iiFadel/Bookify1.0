@@ -282,7 +282,7 @@ app.get('/requests', async (req : Request, res: Response) => {
         return;
     } 
     const requests = await db.getRequests(req.body.status);
-    res.render('requests.html', {requests});
+    res.render('view_requests.html', {requests});
 });
 
 // admin update a request
@@ -330,7 +330,7 @@ app.post('/addbook', upload.fields([{name: 'pdf'},{name:'image'}]), async (req :
     try {
         const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
         const book = await db.addBook(Number(isbn), title, req.session.user_id, String(isbn)+'.pdf', author, description, publisher, subject, language, String(isbn)+files['image'][0].originalname.split('.').pop(), release_date);
-        res.send(JSON.stringify(book));
+        res.send(JSON.stringify(book)); //? maybe add a page that tells the admin that the book has been added?
     } catch (error) {
         console.log(error);
         res.status(400).send('bad request');
