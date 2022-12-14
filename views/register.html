@@ -2,15 +2,15 @@
 {% block title %}Register for Bookify{% endblock %}
 {% block body %}
 <section class="p-5 p-lg-0 pt-lg-5 text-sm-star">
-    <div class="container login-container">
+    <div class="container register-container">
         <div class="d-sm-flex">
-            <div class="sign-form-side">
+            <div class="register-form-side">
                 <a href="">
-                    <img class="bookify-logo" src="../public/images/bookify-logo/Bookify-logo.png" alt="" />
+                    <img class="bookify-logo-register" src="../public/images/bookify-logo/Bookify-logo.png" alt="" />
                 </a>
-                <div class="form-holder">
-                    <div class="form-content">
-                        <div class="form-items">
+                <div class="form-holder register-form-holder">
+                    <div class="form-content register-form-content">
+                      <div class="form-items register-form-items">
                             <h1>Creat an account</h1>
                             <p>Start your reading journey with us today!</p>
                             <form class="requires-validation" novalidate>
@@ -45,7 +45,7 @@
                                         placeholder="Confirm your password" required />
                                 </div>
                                 <div class="form-button mt-3">
-                                    <button id="submit" type="submit" class="btn btn-primary">
+                                    <button id="submit" type="submit" class="btn btn-primary register-btn-primary">
                                         Log in
                                     </button>
                                     <p>Already have an account?<strong> Log in</strong></p>
@@ -55,9 +55,10 @@
                     </div>
                 </div>
             </div>
-            <div class="sign-pattern-side d-none d-md-block">
-                <img class="" src="../public/images/pattern-reg.png" alt="" />
-            </div>
+          </div>
+          <div class="register-pattern-side d-none d-md-block">
+            <img class="" src="../public/images/pattern-reg.png" alt="" />
+          </div>
         </div>
     </div>
 </section>

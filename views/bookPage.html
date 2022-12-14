@@ -1,24 +1,24 @@
 {% extends "layout.html" %}
 {% block title %} {{title}} {% endblock %}
 {% block content %}
-<section class="info-section">
-    <section class="book-information-section">
+<section class="view-info-section">
+    <section class="view-book-information-section">
         <h1>Book information</h1>
-        <div class="container book-container">
-            <div class="BookContainer">
-                <div class="BookimgContainer">
-                    <img class="book-preview-img" src="../public/cover/{{cover_photo}}" />
-                    <div class="UnderBook">
-                        <img class="Bookmarkimg" src="../public/images/icons/bookmarkicon.png" />
-                        <button class="buttonRead">Read Now</button> <!-- TODO add a link to the book -->
+        <div class="container view-book-container">
+            <div class="view-BookContainer">
+                <div class="view-BookimgContainer">
+                    <img class="view-book-preview-img" src="../public/cover/{{cover_photo}}" />
+                    <div class="view-UnderBook">
+                        <img class="view-Bookmarkimg" src="../public/images/icons/bookmark-icon-uncklicked.svg" />
+                        <button class="view-buttonRead">Read Now</button> <!-- TODO add a link to the book -->
                     </div>
                 </div>
-                <div class="book-info-card">
-                    <h3 class="book-name"><strong>{{title}}</strong></h3>
-                    <h6 class="book-author"><strong>By {{authors}}</strong></h4>
-                        <h6 class="book-isbn"><strong>ISBN-10: </strong>{{book_isbn}}</h6>
+                <div class="view-book-info-card">
+                    <h3 class="view-book-name"><strong>{{title}}</strong></h3>
+                    <h6 class="view-book-author"><strong>By {{authors}}</strong></h4>
+                        <h6 class="view-book-isbn"><strong>ISBN-10: </strong>{{book_isbn}}</h6>
 
-                        <div class="book-details">
+                        <div class="view-book-details">
                             <div class="info01">
                                 Published<br />
                                 <span class="underinfo01">{{release_date}}</span>

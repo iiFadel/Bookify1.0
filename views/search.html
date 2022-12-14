@@ -1,51 +1,38 @@
 {% extends "layout.html" %}
 {% block title %}Login Bookify{% endblock %}
 {% block content %}
-<section class="request-section">
+<section class="search-section">
     <h1>Search</h1>
-    <div class="book-search-container">
-        <form class="book-search-form" role="search">
-            <input class="form-control search-bar my-1 mb-1 p-lg-2" type="search" placeholder="Search"
+    <div class="search-book-search-container">
+        <form class="search-book-search-form" role="search">
+            <input class="form-control search-bar my-1 mb-1 p-lg-2 search-form-control" type="search" placeholder="Search"
                 aria-label="Search" />
             <button class="btn form-control submit-button p-3" type="submit">
                 Search Book
             </button>
         </form>
     </div>
-    <!--
-      *********************************************************************
-      *********************************************************************
-      *********************************************************************
-      *********************************************************************
+    <div class="search-container">
 
-    -->
-    <div class="results-container">
-
-        <div class="container book-container">
-            <div class="BookContainer">
-                <div class="BookimgContainer">
-                    <img class="book-preview-img" src="../public/images/books-imgs/The-48-Laws-of-Power.jpg" />
+        <div class="container search-book-container">
+            <div class="search-BookContainer">
+                <div class="search-BookimgContainer">
+                    <img class="search-book-preview-img" src="../public/images/books-imgs/The-48-Laws-of-Power.jpg" />
                 </div>
-                <div class="book-info-card">
-                    <h3 class="book-name"><strong>The 48 Laws of Power</strong></h3>
-                    <h6 class="book-author"><strong>By Robert Greene</strong></h4>
-                        <p class="book-publish">First published: 1998</p>
-                        <p class="book-pages">480 Pages</p>
+                <div class="search-book-info-card">
+                    <h3 class="search-book-name"><strong>The 48 Laws of Power</strong></h3>
+                    <h6 class="search-book-author"><strong>By Robert Greene</strong></h4>
+                        <p class="search-book-publish">First published: 1998</p>
+                        <p class="search-book-pages">480 Pages</p>
                 </div>
-                <div class="right-side-card">
-                    <a href=""><img class="bookmark-icon" src="../public/images/icons/bookmarkicon.png" alt="" /></a>
-                    <button class="view-button">View</button><button class="read-button">Read</button>
+                <div class="search-right-side-card">
+                    <a href=""><img class="search-bookmark-icon" src="../public/images/icons/bookmark-icon-uncklicked.svg" alt="" /></a>
+                    <button class="search-view-button">View</button>
+                    <button class="search-read-button">Read</button>
                 </div>
             </div>
         </div>
     </div>
 
 </section>
-<!--
-      *********************************************************************
-      *********************************************************************
-      *********************************************************************
-      *********************************************************************
-
-    -->
 {% endblock %}
