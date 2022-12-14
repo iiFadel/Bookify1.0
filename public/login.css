@@ -1,0 +1,188 @@
+:root{
+  --primary-blue-color: #1B4A9B;
+  --primary-light-brown-color: #F5EBE0;
+  --primary-bc-color: #FEF9F7;
+}
+body{
+  background-color: #FEF9F7;
+  font-family: 'Lexend', sans-serif;
+}
+
+.login-container{
+  margin-bottom: 3rem;
+
+  max-width:1300px;
+  max-height:700px;
+}
+.form-body{
+  margin-top: 9rem;
+  position: relative;
+  z-index: 3;
+
+}
+
+.login-container {
+  display: flex;
+  flex-direction: row;  
+
+}
+
+.login-form-side {
+  text-align: left; 
+  border-top: 1px solid black; 
+  border-left: 1px solid black; 
+  border-bottom: 1px solid black;
+  border-bottom-left-radius: 3rem; 
+  border-top-left-radius: 3rem; 
+}
+
+.login-pattern-side {
+  width: 50%;
+  border-top: 1px solid black; 
+  border-right: 1px solid black; 
+  border-bottom: 1px solid black; 
+  border-bottom-right-radius: 3rem; 
+  border-top-right-radius: 3rem; 
+
+
+}.login-pattern-side img{
+  width: 100%;
+  height: 100%;object-fit: cover;
+  border-bottom-right-radius: 3rem; 
+  border-top-right-radius: 3rem; 
+}
+.btn.form-control.submit-button{
+  color: white;
+  margin-top: 1rem;
+  background-color: var(--primary-blue-color);
+}
+.request-form-title>h1>img{
+  margin: -2rem 0 0 0;
+}
+.request-form-title>.h1-2{
+  margin-top: -3rem;
+}
+.request-form-title>h1{
+  color: black;
+  font-weight:600 ;
+  
+}
+
+.request-form-title>h3{
+  font-weight:700 ;
+  color: var(--primary-blue-color);
+  margin: -3rem 0 0 1rem;
+}
+
+.form-holder {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.bookify-logo{
+  margin: 3rem;
+}
+.form-holder .form-content {
+  background-color: var(--primary-bc-color);
+  border-radius: 10px;
+position: relative;
+text-align: center;
+display: -webkit-box;
+display: -moz-box;
+display: -ms-flexbox;
+display: -webkit-flex;
+display: flex;
+-webkit-justify-content: center;
+justify-content: center;
+-webkit-align-items: center;
+align-items: center;
+}
+
+.form-content .form-items {
+padding: 3rem;
+display: inline-block;
+width: 100%;
+min-width: 540px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+text-align: left;
+-webkit-transition: all 0.4s ease;
+transition: all 0.4s ease;
+}
+
+.form-content label, .was-validated .form-check-input:invalid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label{
+color: #fff;
+}
+
+.form-content input[type=text],.form-content input[type=password],.form-content input[type=email], .form-content select {
+width: 100%;
+padding: 9px 20px;
+text-align: left;
+outline: 0px;
+border: 0;
+border-bottom: 2px solid gray;
+border-radius: 0px;
+background-color: var(--primary-bc-color);
+font-size: 15px;
+font-weight: 300;
+color: black;
+-webkit-transition: all 0.3s ease;
+transition: all 0.3s ease;
+margin-top: 16px;
+font-size: 20px;
+}
+
+.btn-primary{
+background-color: var(--primary-blue-color);
+outline: none;
+border: 0px;
+box-shadow: none;
+width: 100%;
+font-size: 25px;
+margin-bottom: 1rem;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+background-color: #071a3b;
+outline: none !important;
+border: none !important;
+ box-shadow: none;
+}
+
+.mv-up{
+margin-top: -9px !important;
+margin-bottom: 8px !important;
+}
+
+.invalid-feedback{
+color: #ff606e;
+}
+
+.valid-feedback{
+color: #2acc80;
+}
+.form-items p{
+  font-weight: 200;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+.form-items>p{
+  font-weight: 200;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+.form-items>h1{
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+.form-items p>strong{
+  font-weight: 500;
+  color:#071a3b;
+}
+
+.bookify-logo{
+  width: 10rem;
+}
