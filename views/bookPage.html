@@ -9,7 +9,11 @@
                 <div class="view-BookimgContainer">
                     <img class="view-book-preview-img" src="/cover/{{cover_photo}}" />
                     <div class="view-UnderBook">
-                        <img class="view-Bookmarkimg" src="/images/icons/bookmark-icon-uncklicked.svg" />
+                        <form class="bookmark-val" action="/book/{{book.isbn}}/save" method="post" novalidate>
+                            <button id="submit" type="submit" class="btn btn-primary btn-primary-login">
+                                <img class="view-Bookmarkimg" src="/images/icons/bookmark-icon-uncklicked.svg" />
+                            </button>                            </form>
+                        
                         <button class="view-buttonRead" onclick="location.href='/book/{{book.book_isbn}}/read'">Read Now</button> <!-- TODO add a link to the book -->
                     </div>
                 </div>

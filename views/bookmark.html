@@ -9,13 +9,16 @@
             {% for book in books %}
             <div class="col-md-4">
                 <div class="card bookmark-card" style="width: 18rem">
-                    <img src="/cover{{book.cover_photo}}" class="card-img-top bookmark-card-img-top" alt="book cover" />
+                    <img src="/image{{book.cover_photo}}" class="card-img-top bookmark-card-img-top" alt="book cover" />
                     <div class="card-body bookmark-card-body">
                         <h5 class="card-title bookmark-card-title">{{book.title}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">By {{book.authors}}</h6>
                         <div class="bookmark-button-card-container">
-                            <a href=""><img class="bookmark-icon" src="/images/icons/bookmark-icon-uncklicked.svg" 
-                                    alt="remove bookmark" /></a> <!-- todo -->
+                            <form class="bookmark-val" action="/book/{{book.isbn}}/save" method="post" novalidate>
+                                <button id="submit" type="submit" class="btn btn-primary btn-primary-login">
+                                    <img class="bookmark-icon" src="/images/icons/bookmark-icon-uncklicked.svg" 
+                                    alt="remove bookmark" />
+                                </button>                            </form>
                             <button class="bookmark-view-button">View</button>
                             <button class="bookmark-read-button">Read</button>
                             
