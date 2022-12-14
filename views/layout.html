@@ -2,10 +2,10 @@
 {% block body %}
     <nav class="navbar navbar-expand-lg py-4">
       <div class="container-fluid">
-        <a href="#" class="navbar-brand">
+        <a href="/" class="navbar-brand">
           <img
             class="bookify-nav-logo"
-            src="../public/images/bookify-logo/Bookify-logo.png"
+            src="/images/bookify-logo/Bookify-logo.png"
             alt="Bookify Logo"
           />
         </a>
@@ -20,7 +20,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a href="#BOOKS" class="nav-link">BOOKS</a> <!-- TODO what is this? -->
+              <a href="/" class="nav-link">HOME</a>
             </li>
             <li class="nav-item">
               <a href="/bookmarks" class="nav-link">BOOKMARK</a>
@@ -29,7 +29,7 @@
               <a href="/request" class="nav-link">REQUEST</a>
             </li>
           </ul>
-          <form class="d-flex me-4 ms-4" role="search">
+          <form class="d-flex me-4 ms-4" method="post" action="/search" role="search">
             <input
               class="form-control me-2"
               type="search"
@@ -37,7 +37,7 @@
               aria-label="Search"
             />
           </form>
-          <button class="btn log-in-btn-nav pe-4 ps-4" type="submit">
+          <button class="btn log-in-btn-nav pe-4 ps-4" onclick="location.href='/login'">
             LOG IN
           </button>
         </div>
@@ -53,15 +53,15 @@
       <div class="container">
         <div class="d-sm-flex justify-content-between">
           <div class="foot-l d-sm-block">
-            <a href="">
+            <a href="/">
               <img
                 class="footer-logo"
-                src="../public/images/bookify-logo/logofy-log-white.png"
+                src="/images/bookify-logo/logofy-log-white.png"
                 alt=""
               />
               <img
                 class="footer-logo-text"
-                src="../public/images/bookify-logo/logofy-white.png"
+                src="/images/bookify-logo/logofy-white.png"
                 alt=""
               />
             </a>
@@ -84,28 +84,28 @@
             <a href="/">
               <img
                 class="follow-us-img"
-                src="../public/images/svgs/facebook-icon.svg"
+                src="/images/svgs/facebook-icon.svg"
                 alt=""
               />
             </a>
             <a href="/">
               <img
                 class="follow-us-img"
-                src="../public/images/svgs/instagram-icon.svg"
+                src="/images/svgs/instagram-icon.svg"
                 alt=""
               />
             </a>
             <a href="/">
               <img
                 class="follow-us-img"
-                src="../public/images/svgs/twitter-icon.svg"
+                src="/images/svgs/twitter-icon.svg"
                 alt=""
               />
             </a>
             <a href="/">
               <img
                 class="follow-us-img"
-                src="../public/images/svgs/github-icon.svg"
+                src="/images/svgs/github-icon.svg"
                 alt=""
               />
             </a>

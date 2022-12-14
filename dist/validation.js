@@ -38,7 +38,7 @@ const validate = (validations) => {
         if (errors.isEmpty()) {
             return next();
         }
-        res.status(400).json({ errors: errors.array() });
+        res.status(400).render('register.html', { errors: errors.array(), username: req.body.username, email: req.body.email });
     });
 };
 exports.validate = validate;

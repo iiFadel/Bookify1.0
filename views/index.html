@@ -9,7 +9,7 @@
                 <div class="greeting-statement">
                     <h1 class="better-tham-title "><strong>Nothing Better Than</strong></h1>
                     <div class="container to-read">
-                        <img src="../public/images/svgs/pink-triangle.svg" alt="">
+                        <img src="/images/svgs/pink-triangle.svg" alt="">
                         <h1 class="to-read-title"><strong>To Read</strong></h1>
                     </div>
                 </div>
@@ -22,19 +22,19 @@
                             Search your book by name or ISBN
                         </p>
                     </div>
-                    <div class="sub-greeting-img"><img src="../public/images/svgs/subgreeting-img.svg" alt=""></div>
+                    <div class="sub-greeting-img"><img src="/images/svgs/subgreeting-img.svg" alt=""></div>
                 </div>
                 <div class="greeting-search-container">
-                    <form class="greeting-search-form" role="search">
-                        <input class="form-control search-home my-1 mb-1" type="search" placeholder="Search"
+                    <form class="greeting-search-form" method="post" action="/search" role="search">
+                        <input class="form-control search-home my-1 mb-1" type="search" name="term" placeholder="Search"
                             aria-label="Search">
                         <button class="btn form-control submit-button p-3" type="submit">Search Book</button>
-                        <p class="dont-find-txt">Don't Find Your Book? <strong><a href="/">Submit a request</a></strong>
+                        <p class="dont-find-txt">Don't Find Your Book? <strong><a href="/request">Submit a request</a></strong>
                         </p>
                     </form>
                 </div>
             </div>
-            <img class=" img-fluid w-50 d-none  d-sm-block" src="../public/images/vector-books-img.png" alt="">
+            <img class=" img-fluid w-50 d-none  d-sm-block" src="/images/vector-books-img.png" alt="">
         </div>
     </div>
 </section>
@@ -50,14 +50,14 @@
                 <input type="radio" name="position" />
                 <input type="radio" name="position" />
                 <main id="carousel">
-                    <div class="item"><a href=""><img src="../public/images/books-imgs/2034.jpg" alt=""></a></div>
-                    <div class="item"><a href=""><img src="../public/images/books-imgs/atomic-habits.jpg" alt=""></a>
+                    <div class="item"><a href=""><img src="/images/books-imgs/2034.jpg" alt=""></a></div>
+                    <div class="item"><a href=""><img src="/images/books-imgs/atomic-habits.jpg" alt=""></a>
                     </div>
-                    <div class="item"><a href=""><img src="../public/images/books-imgs/The-48-Laws-of-Power.jpg"
+                    <div class="item"><a href=""><img src="/images/books-imgs/The-48-Laws-of-Power.jpg"
                                 alt=""></a></div>
-                    <div class="item"><a href=""><img src="../public/images/books-imgs/unwinding-anxiety.jpg"
+                    <div class="item"><a href=""><img src="/images/books-imgs/unwinding-anxiety.jpg"
                                 alt=""></a></div>
-                    <div class="item"><a href=""><img src="../public/images/books-imgs/the-outliers.jpg" alt=""></a>
+                    <div class="item"><a href=""><img src="/images/books-imgs/the-outliers.jpg" alt=""></a>
                     </div>
                     <main>
             </div>
@@ -70,21 +70,21 @@
                 <h1>YOU CAN'T<br> FIND YOUR
                 </h1>
                 <h1 class="h1-2">
-                    BOOK? <img src="../public/images/svgs/arrow-lightblue.svg" alt="">
+                    BOOK? <img src="/images/svgs/arrow-lightblue.svg" alt="">
                 </h1>
                 <h3>Submit a request <br>
                     for a book
                 </h3>
             </div>
             <div class="wrapper">
-                <img class="dashed-circle" src="../public/images/svgs/dashed-circle.svg" alt="">
+                <img class="dashed-circle" src="/images/svgs/dashed-circle.svg" alt="">
                 <div class="form-body">
                     <div class="row">
                         <div class="form-holder">
                             <div class="form-content">
                                 <div class="form-items">
                                     <h2>Request a book</h2>
-                                    <form class="requires-validation" novalidate>
+                                    <form class="requires-validation" method="post" action="/request" novalidate>
                                         <div class="col-md-12">
                                             <input class="form-control" type="text" name="title"
                                                 placeholder="Book Title" required>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <img class="dotted-square" src="../public/images/svgs/dotted-square.svg" alt="">
+                <img class="dotted-square" src="/images/svgs/dotted-square.svg" alt="">
             </div>
         </div>
     </div>

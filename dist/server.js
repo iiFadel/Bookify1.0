@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const validation_1 = require("./validation");
 const express_session_1 = __importDefault(require("express-session"));
 const nunjucks_1 = __importDefault(require("nunjucks"));
+const multer_1 = __importDefault(require("multer"));
 const db_1 = __importDefault(require("./db"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = 3000;
@@ -34,68 +34,138 @@ app.use((0, express_session_1.default)({
         maxAge: 1000 * 60 * 60 // 1 hour
     }
 }));
+const storage = multer_1.default.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/' + file.fieldname);
+    },
+    filename: function (req, file, cb) {
+        cb(null, req.body.isbn + file.originalname.split('.').pop());
+    }
+});
+const upload = (0, multer_1.default)({ storage: storage });
+//**** ROUTES ****//
 // root
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.username) {
-        res.render('index.html'); // render logged in version
+    var _a;
+    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.username) {
+        res.render('index.html', { signedIn: true, username: req.session.username }); // render logged in version
     }
     else {
-        res.render('index.html'); // render logged out version
+        res.render('index.html', { signedIn: false }); // render logged out version
     }
 }));
+//** login/register **//
 // register
 app.get('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.username) {
-        console.log(req.session);
+    var _b;
+    if ((_b = req.session) === null || _b === void 0 ? void 0 : _b.username) {
         res.redirect('/');
     }
     else {
-        console.log(req.session);
-        res.send('register.html');
+        res.render('register.html');
     }
 }));
 app.post('/register', (0, validation_1.validate)([validation_1.newUsernameSchema, validation_1.newPasswordSchema, validation_1.emailSchema]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, email } = req.body;
+    console.log(req.body);
     // check if user already exists
     const userExists = yield db_1.default.getUser(username);
     const emailExists = yield db_1.default.getUserByEmail(email);
-    if (userExists || emailExists) {
-        res.status(400).send('User already exists');
+    if (userExists) {
+        res.status(400).render('register.html', { errors: [{ msg: 'Username already in use' }], username: username, email: email });
+    }
+    else if (emailExists) {
+        res.status(400).render('register.html', { errors: [{ msg: 'Email already in use' }], username: username, email: email });
     }
     else {
-        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        const user = yield db_1.default.addUser(username, hashedPassword, email);
-        res.send(JSON.stringify(user));
+        const hashedPassword = password; //await bcrypt.hash(password, 10);
+        yield db_1.default.addUser(username, hashedPassword, email);
+        // ? pop up message saying account created
         res.redirect('/login');
     }
 }));
 // login
 app.get('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.username) {
+    var _c;
+    if ((_c = req.session) === null || _c === void 0 ? void 0 : _c.username) {
         res.redirect('/');
     }
     else {
-        res.send('login.html');
+        res.render('login.html');
     }
 }));
 app.post('/login', validation_1.sanitizePassword, validation_1.sanitizeUsername, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d;
+    if ((_d = req.session) === null || _d === void 0 ? void 0 : _d.username) {
+        res.redirect('/');
+    }
     const { username, password } = req.body;
+    // check if user exists
     const user = yield db_1.default.getUser(username);
     if (user) {
-        const match = yield bcrypt_1.default.compare(password, user.password);
-        if (match) {
-            res.redirect('/');
+        // const match = await bcrypt.compare(password, user.password);
+        // console.log(match);
+        if (password == user.password) {
             // initialize session
             req.session.username = user.username;
             req.session.user_id = user.user_id;
+            req.session.admin = false;
+            res.redirect('/');
+            return;
+        }
+    }
+    // check if user is an admin
+    const admin = yield db_1.default.getAdmin(username);
+    if (admin) {
+        // const match = await bcrypt.compare(password, admin.password);
+        if (password == admin.password) {
+            // initialize session
+            req.session.username = admin.username;
+            req.session.user_id = admin.user_id;
+            req.session.admin = true;
+            res.redirect('/');
+            return;
+        }
+    }
+    res.status(400).render('login.html', { error: 'Credentials invalid', username: username });
+}));
+// logout
+app.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e;
+    if (!((_e = req.session) === null || _e === void 0 ? void 0 : _e.username)) {
+        res.redirect('/');
+    }
+    req.session.destroy((err) => {
+        if (err) {
+            console.log(err);
         }
         else {
-            res.status(400).send('Password does not match');
+            res.redirect('/');
         }
+    });
+}));
+//** Books **//
+// get book page
+app.get('/book/:book_isbn', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const book_isbn = Number(req.params.book_isbn);
+    const book = yield db_1.default.getBooks([book_isbn]);
+    res.render('book.html', book[0]);
+}));
+// get saved books page
+app.get('/bookmarks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g;
+    if ((_f = req.session) === null || _f === void 0 ? void 0 : _f.admin) {
+        res.status(403).send('Admins cannot have saved books');
+        return;
     }
-    else {
-        res.status(400).send('User does not exist');
+    if (!((_g = req.session) === null || _g === void 0 ? void 0 : _g.user_id)) {
+        res.redirect('/login');
+        return;
     }
+    const user_id = Number(req.session.user_id);
+    const books = yield db_1.default.getSavedBooks(user_id); //get the book isbn's 
+    const bookInfo = yield db_1.default.getBooks(books); // get the book infos
+    res.render('bookmark.html', { books: bookInfo });
 }));
 // get reviews about a book
 app.get('/book/:book_isbn/reviews', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -105,41 +175,195 @@ app.get('/book/:book_isbn/reviews', (req, res) => __awaiter(void 0, void 0, void
 }));
 // add a review about a book
 app.post('/book/:book_isbn/reviews', (0, validation_1.validate)([validation_1.commentSchema]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // check if user is logged in
-    if (req.session.user_id) {
-        const book_isbn = Number(req.params.book_isbn);
-        const comment = req.body.comment;
-        const rating = Number(req.body.rating);
-        const user_id = req.session.user_id;
-        const review = yield db_1.default.addReview(user_id, book_isbn, comment, rating);
-        res.send(JSON.stringify(review));
+    var _h, _j;
+    // dont accept reviews from admins
+    if ((_h = req.session) === null || _h === void 0 ? void 0 : _h.admin) {
+        res.status(403).send('Admins cannot review books');
     }
-    else {
+    // check if user is logged in
+    if (!((_j = req.session) === null || _j === void 0 ? void 0 : _j.user_id)) {
         res.redirect('/login');
     }
+    const book_isbn = Number(req.params.book_isbn);
+    const comment = req.body.comment;
+    const rating = Number(req.body.rating);
+    const user_id = req.session.user_id;
+    const review = yield db_1.default.addReview(user_id, book_isbn, comment, rating);
+    res.send(JSON.stringify(review));
 }));
-// TODO routes 
-// get book page
-app.get('/book/:book_isbn', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// reading view of a book
+// just send pdf file and let the browser handle it
+app.get('/book/:book_isbn/reading', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // todo add a reading page
     const book_isbn = Number(req.params.book_isbn);
     const book = yield db_1.default.getBooks([book_isbn]);
-    res.render('book.html', book);
+    res.redirect('/pdf/' + book[0].pdf);
 }));
-// get saved books page
-app.get('/saved', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.user_id) {
-        const user_id = Number(req.session.user_id);
-        const books = yield db_1.default.getSavedBooks(user_id); //get the book isbn's 
-        const bookInfo = yield db_1.default.getBooks(books); // get the book infos
-        res.render('saved.html', { bookInfo });
+//** Search books **//
+// search for books
+// get advanced search form
+// app.get('/advancedSearch', async (req: Request, res: Response) => {
+//     res.render('advancedSearch.html');
+// });
+// type searchRequest = {
+//     isbn?: number;
+//     title?: string;
+//     author?: string;
+//     subject?: string;
+//     publisher?: string;
+//     language?: string;
+//     description?: string;
+//     release_date?: string;
+// }
+// // post advanced search form
+// // advanced search queries should be in the following format:
+// // http://127.0.0.1:3000/query?isbn=123&title=hello&author=world
+// app.post('/advancedsearch', async (req: Request, res: Response) => {
+//     try {
+//         const searchRequest: searchRequest = req.query;
+//         const isbns = await db.searchBook(searchRequest.isbn, searchRequest.title, searchRequest.author, searchRequest.subject, searchRequest.language, searchRequest.publisher, searchRequest.description, searchRequest.release_date);
+//         const books = await db.getBooks(isbns);
+//         res.render('searchResult.html', { books: books });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(400).send('Bad request');
+//     }
+// });
+// post search form
+app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const searchTerm = req.body.term;
+    if (searchTerm) {
+        const isbns = yield db_1.default.searchBookByTerm(searchTerm);
+        const books = yield db_1.default.getBooks(isbns);
+        res.render('search.html', { term: searchTerm, books: books });
+    }
+    else {
+        res.status(400).send('Bad request');
     }
 }));
-// search for books
-app.get('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let searchRequest = req.query;
-    const isbns = yield db_1.default.searchBook(searchRequest.isbn, searchRequest.title, searchRequest.author, searchRequest.subject, searchRequest.language, searchRequest.publisher, searchRequest.description, searchRequest.release_date);
-    const books = yield db_1.default.getBooks(isbns);
-    res.render('search.html', { books });
+//** Requests **//
+// book request form
+app.get('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _k, _l;
+    if ((_k = req.session) === null || _k === void 0 ? void 0 : _k.admin) {
+        res.status(403).send('Admins cannot request books');
+        return;
+    }
+    if (!((_l = req.session) === null || _l === void 0 ? void 0 : _l.user_id)) {
+        res.redirect('/login');
+        return;
+    }
+    res.render('request.html');
+}));
+// post book request form
+// form should include title and a short letter
+app.post('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _m, _o;
+    if ((_m = req.session) === null || _m === void 0 ? void 0 : _m.admin) {
+        res.status(403).send('Admins cannot request books');
+        return;
+    }
+    else if (!((_o = req.session) === null || _o === void 0 ? void 0 : _o.user_id)) {
+        res.redirect('/login');
+        return;
+    }
+    const { title, isbn } = req.body;
+    const author = req.body.author;
+    const user_id = Number(req.session.user_id);
+    const request = yield db_1.default.addRequest(user_id, title, isbn, author);
+    res.redirect('/');
+}));
+// admin view all requests
+app.get('/requests', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.session.admin) {
+        res.status(403).send('this page is not for you friend');
+        return;
+    }
+    const requests = yield db_1.default.getRequests(req.body.status);
+    res.render('view_requests.html', { requests });
+}));
+// admin update a request
+// include status and request_id in the body
+app.put('/requests', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.session.admin || !req.session.user_id) {
+        res.status(403).send('this page is not for you friend');
+        return;
+    }
+    try {
+        const request_id = Number(req.body.request_id);
+        const status = req.body.status;
+        const request = yield db_1.default.updateRequestStatus(request_id, status, req.session.user_id);
+        res.send(JSON.stringify(request));
+    }
+    catch (error) {
+        res.status(400).send('bad request');
+        console.log(error);
+    }
+}));
+//** Admin add/update book **//
+// admin add book form
+app.get('/addbook', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.session.admin) {
+        res.status(403).send('this page is not for you friend');
+        return;
+    }
+    res.render('addBook.html');
+}));
+// admin add book
+// Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
+// the field name for the pdf file and the image MUST be "pdf" and "image" respectively
+app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.session.admin || !req.session.user_id) {
+        res.status(403).send('this page is not for you friend');
+        return;
+    }
+    if (!req.files) {
+        res.status(400).send('bad request');
+        return;
+    }
+    const files = req.files;
+    try {
+        const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
+        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + files['image'][0].originalname.split('.').pop(), release_date);
+        res.send(JSON.stringify(book)); //? maybe add a page that tells the admin that the book has been added?
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).send('bad request');
+    }
+}));
+// admin update book form
+app.get('/updatebook/:book_isbn', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.session.admin || !req.session.user_id) {
+        res.status(403).send('this page is not for you friend');
+        return;
+    }
+    const book = yield db_1.default.getBooks([Number(req.params.book_isbn)]);
+    res.render('addBook.html', book[0]);
+}));
+// admin update book
+// Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
+// the field name for the pdf file and the image MUST be "pdf" and "image" respectively
+app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'image' }]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.session.admin || !req.session.user_id) {
+        res.status(403).send('this page is not for you friend');
+        return;
+    }
+    if (!req.files) {
+        res.status(400).send('bad request');
+        return;
+    }
+    const files = req.files;
+    try {
+        yield db_1.default.removeBook(Number(req.params.book_isbn));
+        const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
+        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + files['image'][0].originalname.split('.').pop(), release_date);
+        res.send(JSON.stringify(book));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).send('bad request');
+    }
 }));
 app.listen(port, () => {
     console.log(`server listening on port http://127.0.0.1:${port}`);

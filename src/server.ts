@@ -8,6 +8,7 @@ import express, { Express, Response, Request } from 'express';
 const app: Express = express();
 const port = 3000;
 
+
 // configure nunjucks templates
 nunjucks.configure('views', { express: app, autoescape: true });
 
@@ -57,16 +58,16 @@ app.get('/', async (req: Request, res: Response) => {
 // register
 app.get('/register', async (req: Request, res: Response) => {
     if (req.session?.username) {
-        console.log(req.session);
         res.redirect('/');
     } else {
-        console.log(req.session);
         res.render('register.html');
     }
 });
 
 app.post('/register', validate([newUsernameSchema, newPasswordSchema, emailSchema]), async (req: Request, res: Response) => {
     const { username, password, email } = req.body;
+    console.log(req.body);
+    
     // check if user already exists
     const userExists = await db.getUser(username);
     const emailExists = await db.getUserByEmail(email);
@@ -75,7 +76,7 @@ app.post('/register', validate([newUsernameSchema, newPasswordSchema, emailSchem
     } else if (emailExists){
         res.status(400).render('register.html', { errors: [{msg:'Email already in use'}], username: username, email: email });
     } else {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = password //await bcrypt.hash(password, 10);
         await db.addUser(username, hashedPassword, email);
         // ? pop up message saying account created
         res.redirect('/login');
@@ -98,9 +99,12 @@ app.post('/login', sanitizePassword, sanitizeUsername, async (req: Request, res:
     const { username, password } = req.body;
     // check if user exists
     const user = await db.getUser(username);
+    
     if (user) {
-        const match = await bcrypt.compare(password, user.password);
-        if (match) {
+        // const match = await bcrypt.compare(password, user.password);
+        // console.log(match);
+        
+        if (password == user.password) {
             // initialize session
             req.session.username = user.username;
             req.session.user_id = user.user_id;
@@ -112,13 +116,14 @@ app.post('/login', sanitizePassword, sanitizeUsername, async (req: Request, res:
     // check if user is an admin
     const admin = await db.getAdmin(username);
     if (admin) {
-        const match = await bcrypt.compare(password, admin.password);
-        if (match) {
+        // const match = await bcrypt.compare(password, admin.password);
+        if (password == admin.password) {
             // initialize session
             req.session.username = admin.username;
             req.session.user_id = admin.user_id;
             req.session.admin = true;
             res.redirect('/');
+            return;
         }
     }
     res.status(400).render('login.html', { error: 'Credentials invalid', username: username });
@@ -151,14 +156,16 @@ app.get('/book/:book_isbn', async (req: Request, res: Response) => {
 app.get('/bookmarks', async (req: Request, res: Response) => {
     if (req.session?.admin) {
         res.status(403).send('Admins cannot have saved books');
+        return;
     }
     if (!req.session?.user_id) {
         res.redirect('/login');
-    }
+        return;
+    }    
     const user_id = Number(req.session.user_id);
     const books = await db.getSavedBooks(user_id); //get the book isbn's 
     const bookInfo = await db.getBooks(books); // get the book infos
-    res.render('saved.html', { books: bookInfo });
+    res.render('bookmark.html', { books: bookInfo });
 });
 
 // get reviews about a book
@@ -229,14 +236,12 @@ app.get('/book/:book_isbn/reading', async (req: Request, res: Response) => {
 // });
 
 // post search form
-// search queries should be in the following format:
-// http://127.0.0.1:3000/query?term=hello
 app.post('/search', async (req: Request, res: Response) => {
-    const searchTerm = JSON.stringify(req.query.term);
+    const searchTerm = req.body.term;
     if (searchTerm) {
         const isbns = await db.searchBookByTerm(searchTerm);
         const books = await db.getBooks(isbns);
-        res.render('searchResult.html', { books: books });
+        res.render('search.html', {term:searchTerm, books: books });
     } else {
         res.status(400).send('Bad request');
     }
@@ -255,7 +260,7 @@ app.get('/request', async (req: Request, res: Response) => {
         return;
     }
     res.render('request.html');
-});
+}); 
 
 // post book request form
 // form should include title and a short letter
@@ -271,7 +276,7 @@ app.post('/request', async (req: Request, res: Response) => {
     const author = req.body.author;
     const user_id = Number(req.session.user_id);
     const request = await db.addRequest(user_id, title, isbn, author);
-    res.send(JSON.stringify(request));
+    res.redirect('/');
 
 });
 
@@ -287,7 +292,7 @@ app.get('/requests', async (req: Request, res: Response) => {
 
 // admin update a request
 // include status and request_id in the body
-app.put('/requests/', async (req: Request, res: Response) => {
+app.put('/requests', async (req: Request, res: Response) => {
     if (!req.session.admin || !req.session.user_id) {
         res.status(403).send('this page is not for you friend');
         return;

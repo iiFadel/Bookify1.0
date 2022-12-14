@@ -15,26 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sqlite3_1 = __importDefault(require("sqlite3"));
 const sqlite_1 = __importDefault(require("sqlite"));
 const sql_template_strings_1 = __importDefault(require("sql-template-strings"));
-function connectToDB() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield sqlite_1.default.open({
-            filename: './.db3',
-            driver: sqlite3_1.default.Database
-        });
+const connectToDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield sqlite_1.open({
+        filename: './library.db',
+        driver: sqlite3_1.default.Database
     });
-}
+});
 // add a user to the database
 function addUser(username, password, email) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = yield connectToDB();
-        return yield db.run((0, sql_template_strings_1.default) `INSERT INTO users (username, password, email) VALUES (${username}, ${password}, ${email})`);
+        return yield db.run((0, sql_template_strings_1.default) `INSERT INTO user (username, password, email) VALUES (${username}, ${password}, ${email})`);
     });
 }
 // get user by username
 function getUser(username) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = yield connectToDB();
-        const user = yield db.get((0, sql_template_strings_1.default) `SELECT * FROM users WHERE username = ${username}`);
+        const user = yield db.get((0, sql_template_strings_1.default) `SELECT * FROM user WHERE username = ${username}`);
         return user;
     });
 }
@@ -72,7 +70,14 @@ function removeSavedBook(user_id, book_isbn) {
 function addBook(isbn, title, admin_id, pdfPath, authors, description, publisher, subject, language, coverImagePath, release_date) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = yield connectToDB();
-        return yield db.run((0, sql_template_strings_1.default) `INSERT INTO book (book_isbn, title, added_by, pdf, authors, description, publisher, subject, language, cover_photo) VALUES (${isbn}, ${title}, ${admin_id}, ${pdfPath}, ${authors}, ${description}, ${publisher}, ${subject}, ${language}, ${coverImagePath})`);
+        return yield db.run((0, sql_template_strings_1.default) `INSERT INTO book (book_isbn, title, added_by, pdf, authors, description, publisher, subject, language, cover_photo, release_date) VALUES (${isbn}, ${title}, ${admin_id}, ${pdfPath}, ${authors}, ${description}, ${publisher}, ${subject}, ${language}, ${coverImagePath}, ${release_date})`);
+    });
+}
+// remove a book
+function removeBook(isbn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = yield connectToDB();
+        return yield db.run((0, sql_template_strings_1.default) `DELETE FROM book WHERE book_isbn = ${isbn}`);
     });
 }
 // get multiple books by isbn
@@ -122,10 +127,10 @@ function getReviews(book_isbn) {
     });
 }
 // add a book request
-function addRequest(user_id, letter, title) {
+function addRequest(user_id, title, isbn, author) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = yield connectToDB();
-        return yield db.run((0, sql_template_strings_1.default) `INSERT INTO book_request (letter, title, submitted_by, updated_by, status) VALUES (${letter}, ${title}, ${user_id}, ${null}, 'pending')`);
+        return yield db.run((0, sql_template_strings_1.default) `INSERT INTO book_request (title, isbn, authors, submitted_by, updated_by, status) VALUES (${title}, ${isbn}, ${author}, ${user_id}, ${null}, 'pending')`);
     });
 }
 // get book requests 
@@ -199,6 +204,20 @@ function searchBook(isbn, title, author, subject, language, publisher, descripti
         throw new Error("No search criteria provided.");
     });
 }
+// by term search
+function searchBookByTerm(term) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = yield connectToDB();
+        return yield db.all((0, sql_template_strings_1.default) `SELECT book_isbn FROM book WHERE 
+                title LIKE '%${term}%'
+                OR authors LIKE '%${term}%'
+                OR subject LIKE '%${term}%'
+                OR language LIKE '%${term}%'
+                OR publisher LIKE '%${term}%'
+                OR description LIKE '%${term}%'
+                OR release_date LIKE '%${term}%'`);
+    });
+}
 exports.default = {
     addUser,
     getUser,
@@ -218,5 +237,7 @@ exports.default = {
     updateRequestStatus,
     getUserByEmail,
     getAdminByEmail,
-    searchBook
+    searchBook,
+    searchBookByTerm,
+    removeBook
 };

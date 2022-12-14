@@ -6,32 +6,33 @@
     <div class="search-book-search-container">
         <form class="search-book-search-form" role="search">
             <input class="form-control search-bar my-1 mb-1 p-lg-2 search-form-control" type="search" placeholder="Search"
-                aria-label="Search" />
+                aria-label="Search" value="{{term}}"/>
             <button class="btn form-control submit-button p-3" type="submit">
                 Search Book
             </button>
         </form>
     </div>
     <div class="search-container">
-
+        {% for book in books %}
         <div class="container search-book-container">
             <div class="search-BookContainer">
                 <div class="search-BookimgContainer">
-                    <img class="search-book-preview-img" src="../public/images/books-imgs/The-48-Laws-of-Power.jpg" />
+                    <img class="search-book-preview-img" src="/image/{{book.image}}" />
                 </div>
                 <div class="search-book-info-card">
-                    <h3 class="search-book-name"><strong>The 48 Laws of Power</strong></h3>
-                    <h6 class="search-book-author"><strong>By Robert Greene</strong></h4>
-                        <p class="search-book-publish">First published: 1998</p>
-                        <p class="search-book-pages">480 Pages</p>
+                    <h3 class="search-book-name"><strong>{{book.title}}</strong></h3>
+                    <h6 class="search-book-author"><strong>By {{book.authors}}</strong></h4>
+                        <p class="search-book-publish">First published: {{book.released_date}}</p>
+                        <!-- <p class="search-book-pages">{{book.pages}} Pages</p> -->
                 </div>
                 <div class="search-right-side-card">
-                    <a href=""><img class="search-bookmark-icon" src="../public/images/icons/bookmark-icon-uncklicked.svg" alt="" /></a>
+                    <a href=""><img class="search-bookmark-icon" src="/images/icons/bookmark-icon-uncklicked.svg" alt="" /></a>
                     <button class="search-view-button">View</button>
                     <button class="search-read-button">Read</button>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
 
 </section>

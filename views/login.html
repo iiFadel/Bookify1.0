@@ -6,15 +6,15 @@
         <div class="d-sm-flex">
             <div class="login-form-side">
                 <a href="">
-                    <img class="bookify-logo-login" src="../public/images/bookify-logo/Bookify-logo.png" alt="" />
+                    <img class="bookify-logo-login" src="/images/bookify-logo/Bookify-logo.png" alt="" />
                 </a>
                 <div class="form-holder form-holder-login">
                     <div class="form-content form-content-login">
                       <div class="form-items form-items-login">
                             <h1>Welcome back</h1>
                             <p>Welcome back! Please enter your details</p>
-                            <form class="requires-validation" novalidate>
-                                {% if errors %}
+                            <form class="requires-validation" action="/login" method="post" novalidate>
+                                {% if error %}
                                 <div class="alert alert-danger" role="alert">
                                     <ul>
                                         <li>{{error}}</li>
@@ -37,7 +37,7 @@
                                         Log in
                                     </button>
                                     <p>
-                                        Don't have an account?<strong> Sign up for free</strong>
+                                        Don't have an account?<strong><a href="/register"> Sign up for free</a></strong>
                                     </p>
                                 </div>
                             </form>
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="login-pattern-side d-none d-md-block">
-                <img class="" src="../public/images/pattern-login.png" alt="" />
+                <img class="" src="/images/pattern-login.png" alt="" />
             </div>
         </div>
     </div>

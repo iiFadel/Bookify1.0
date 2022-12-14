@@ -2,9 +2,9 @@ import sqlite3 from 'sqlite3';
 import sqlite from 'sqlite';
 import sql from 'sql-template-strings';
 
-async function connectToDB(): Promise<sqlite.Database<sqlite3.Database,sqlite3.Statement>> {
+const connectToDB = async () => {
     return await sqlite.open({
-        filename: './.db3',
+        filename: './library.db',
         driver: sqlite3.Database
       });
 }
@@ -12,13 +12,13 @@ async function connectToDB(): Promise<sqlite.Database<sqlite3.Database,sqlite3.S
 // add a user to the database
 async function addUser(username: string, password: string, email: string): Promise<sqlite.ISqlite.RunResult<sqlite3.Statement>> {
     const db = await connectToDB();
-    return await db.run(sql`INSERT INTO users (username, password, email) VALUES (${username}, ${password}, ${email})`);
+    return await db.run(sql`INSERT INTO user (username, password, email) VALUES (${username}, ${password}, ${email})`);
 }
 
 // get user by username
 async function getUser(username: string): Promise<any> {
     const db = await connectToDB();
-    const user = await db.get(sql`SELECT * FROM users WHERE username = ${username}`);
+    const user = await db.get(sql`SELECT * FROM user WHERE username = ${username}`);
     return user;
 }
 
