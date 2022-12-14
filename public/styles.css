@@ -1353,3 +1353,18 @@ top: -8rem;
   .search-book-author{
     display: inline;
   }
+
+/*************************************
+*************************************
+            read book css
+*************************************
+*************************************/  
+#myPDF{
+    width: 60%;
+    height: 700px;
+    margin: 0 auto;
+  }
+  .read-book-container{
+
+    text-align: center;
+  }
