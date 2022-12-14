@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(session({
 	secret: '89u7564hr4yt6bv43nejc46dwsx',
 	resave: false,
-	saveUninitialized: true,
+	saveUninitialized: false,
 	cookie: {
 		maxAge: 1000 * 60 * 60 // 1 hour
 	}
@@ -46,17 +46,17 @@ const upload = multer({ storage: storage })
 //**** ROUTES ****//
 // root
 app.get('/', async (req : Request, res: Response) => {
-    if (req.session.username) {
-        res.render('index.html'); // render logged in version
+    if (req.session?.username) {
+        res.render('index.html', {signedIn:true, username:req.session.username}); // render logged in version
     } else {
-        res.render('index.html'); // render logged out version
+        res.render('index.html', {signedIn:false}); // render logged out version
     }
 });
 
 //** login/register **//
 // register
 app.get('/register', async (req : Request, res: Response) => {
-    if (req.session.username) {
+    if (req.session?.username) {
         console.log(req.session);
         res.redirect('/');
     } else {
@@ -82,14 +82,17 @@ app.post('/register', validate([newUsernameSchema, newPasswordSchema, emailSchem
 
 // login
 app.get('/login', async (req : Request, res: Response) => {
-    if (req.session.username) {
+    if (req.session?.username) {
         res.redirect('/');
     } else {
-        res.send('login.html');
+        res.render('login.html');
     }
 });
 
 app.post('/login', sanitizePassword, sanitizeUsername, async (req : Request, res: Response) => {
+    if (req.session?.username) {
+        res.redirect('/');
+    }
     const { username, password } = req.body;
     // check if user exists
     const user = await db.getUser(username);
@@ -101,31 +104,32 @@ app.post('/login', sanitizePassword, sanitizeUsername, async (req : Request, res
             req.session.user_id = user.user_id;
             req.session.admin = false;
             res.redirect('/');
-        } else {
-            res.status(400).send('Password does not match');
-        }
-    } else {
-        // check if user is an admin
-        const admin = await db.getAdmin(username);
-        if (admin) {
-            const match = await bcrypt.compare(password, admin.password);
-            if (match) {
-                // initialize session
-                req.session.username = admin.username;
-                req.session.user_id = admin.user_id;
-                req.session.admin = true;
-                res.redirect('/');
-            } else {
-                res.status(400).send('Password does not match');
-            }
-        } else {
-            res.status(400).send('User does not exist');
+            return;
         }
     }
+    // check if user is an admin
+    const admin = await db.getAdmin(username);
+    if (admin) {
+        const match = await bcrypt.compare(password, admin.password);
+        if (match) {
+            // initialize session
+            req.session.username = admin.username;
+            req.session.user_id = admin.user_id;
+            req.session.admin = true;
+            res.redirect('/');
+        } else {
+            res.status(400).render('login.html', {error:'Credentials invalid', username:username});
+        }
+    }
+    res.status(400).send('User does not exist');
+    
 });
 
 // logout
 app.get('/logout', async (req : Request, res: Response) => {
+    if (!req.session?.username) {
+        res.redirect('/');
+    }
     req.session.destroy((err) => {
         if (err) {
             console.log(err);
@@ -145,16 +149,16 @@ app.get('/book/:book_isbn', async (req : Request, res: Response) => {
 
 // get saved books page
 app.get('/saved', async (req : Request, res: Response) => {
-    if (req.session.admin) {
+    if (req.session?.admin) {
         res.status(403).send('Admins cannot have saved books');
     }
-
-    if (req.session.user_id) {
-        const user_id = Number(req.session.user_id);
-        const books = await db.getSavedBooks(user_id); //get the book isbn's 
-        const bookInfo = await db.getBooks(books); // get the book infos
-        res.render('saved.html', {books:bookInfo});
+    if (!req.session?.user_id) {
+        res.redirect('/login');
     }
+    const user_id = Number(req.session.user_id);
+    const books = await db.getSavedBooks(user_id); //get the book isbn's 
+    const bookInfo = await db.getBooks(books); // get the book infos
+    res.render('saved.html', {books:bookInfo});
 });
 
 // get reviews about a book
@@ -167,26 +171,26 @@ app.get('/book/:book_isbn/reviews', async (req : Request, res: Response) => {
 // add a review about a book
 app.post('/book/:book_isbn/reviews', validate([commentSchema]), async (req : Request, res: Response) => {
     // dont accept reviews from admins
-    if (req.session.admin) {
+    if (req.session?.admin) {
         res.status(403).send('Admins cannot review books');
     }
 
     // check if user is logged in
-    if (req.session.user_id) {
-        const book_isbn = Number(req.params.book_isbn);
-        const comment = req.body.comment;
-        const rating = Number(req.body.rating);
-        const user_id = req.session.user_id;
-        const review = await db.addReview(user_id, book_isbn, comment, rating);
-        res.send(JSON.stringify(review));
-    } else {
+    if (!req.session?.user_id) {
         res.redirect('/login');
     }
+    const book_isbn = Number(req.params.book_isbn);
+    const comment = req.body.comment;
+    const rating = Number(req.body.rating);
+    const user_id = req.session.user_id as number;
+    const review = await db.addReview(user_id, book_isbn, comment, rating);
+    res.send(JSON.stringify(review));
 });
 
 // reading view of a book
 // just send pdf file and let the browser handle it
 app.get('/book/:book_isbn/reading', async (req : Request, res: Response) => {
+    // todo add a reading page
     const book_isbn = Number(req.params.book_isbn);
     const book = await db.getBooks([book_isbn]);
     res.redirect('/pdf/' + book[0].pdf);
@@ -234,7 +238,7 @@ app.post('/search', async (req : Request, res: Response) => {
         const books = await db.getBooks(isbns);
         res.render('searchResult.html', {books:books});
     } else {
-        res.redirect('/');
+        res.status(400).send('Bad request');
     }
 });
 
@@ -242,11 +246,11 @@ app.post('/search', async (req : Request, res: Response) => {
 //** Requests **//
 // book request form
 app.get('/request', async (req : Request, res: Response) => {
-    if (req.session.admin){
+    if (req.session?.admin){
         res.status(403).send('Admins cannot request books');
         return;
     }
-    if (!req.session.user_id) {
+    if (!req.session?.user_id) {
         res.redirect('/login');
         return;
     }
@@ -256,16 +260,17 @@ app.get('/request', async (req : Request, res: Response) => {
 // post book request form
 // form should include title and a short letter
 app.post('/request', async (req : Request, res: Response) => {
-    if (req.session.admin){
+    if (req.session?.admin){
         res.status(403).send('Admins cannot request books');
         return;
-    } else if (!req.session.user_id) {
+    } else if (!req.session?.user_id) {
         res.redirect('/login');
         return;
     }
-    const { title, letter } = req.body;
+    const { title, isbn } = req.body;
+    const author = req.body.author;
     const user_id = Number(req.session.user_id);
-    const request = await db.addRequest(user_id, title, letter);
+    const request = await db.addRequest(user_id, title, isbn, author);
     res.send(JSON.stringify(request));
     
 });
