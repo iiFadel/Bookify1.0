@@ -5,6 +5,7 @@
 }
 body{
     background-color: #FEF9F7;
+    
     font-family: 'Lexend', sans-serif;
 }
 h1{
@@ -364,7 +365,19 @@ top: -8rem;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
-
+.form-content .form-items {
+  border: 1px solid black;
+  padding: 3rem;
+  display: inline-block;
+  width: 100%;
+  min-width: 540px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  text-align: left;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
 .form-content label, .was-validated .form-check-input:invalid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label{
   color: #fff;
 }
@@ -1354,12 +1367,8 @@ top: -8rem;
     display: inline;
   }
 
-/*************************************
-*************************************
-            read book css
-*************************************
-*************************************/  
-#myPDF{
+  /* read-book */
+  #myPDF{
     width: 60%;
     height: 700px;
     margin: 0 auto;
@@ -1368,3 +1377,6 @@ top: -8rem;
 
     text-align: center;
   }
+  .read-book-section{
+    margin: 5rem 5%;
+    }
