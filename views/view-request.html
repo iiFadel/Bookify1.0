@@ -1,31 +1,35 @@
-{% extends "layout.html" %}
-{% block title %}Book Requests{% endblock %}
-{% block content %}
-    <section class="view-request-section">
-      <h1>Book Requests</h1>
-      <div class="view-request-container">
-        <div class="reques-card"></div>
+{% extends "layout.html" %} {% block title %}Book Requests{% endblock %} {%
+block content %}
+<section class="view-request-section">
+  <h1>Book Requests</h1>
+  <div class="view-request-container">
+    <div class="reques-card"></div>
 
-        {% for request in requests %}
-        <div class="view-request-card">
-          <h5>
-            <strong>Book: </strong>
-            <span><h6 class="view-request-h6">{{request.title}}</h6></span>
-          </h5>
-          <h5>
-            <strong>Author: </strong>
-            <span><h6 class="view-request-h6">{{request.authors}}</h6></span>
-          </h5>
-          <h5>
-            <strong>ISBN-10: </strong>
-            <span><h6 class="view-request-h6">{{request.isbn}}</h6></span>
-          </h5>
-          <div class="view-request-button-container">
-            <button class="view-request-reject-button">Reject</button
-            ><button class="view-request-add-button">Add</button>
-          </div>
-        </div>
-        {% endfor %}
+    {% for request in requests %}
+    <div class="view-request-card">
+      <h5>
+        <strong>Book: </strong>
+        <span><h6 class="view-request-h6">{{request.title}}</h6></span>
+      </h5>
+      <h5>
+        <strong>Author: </strong>
+        <span><h6 class="view-request-h6">{{request.authors}}</h6></span>
+      </h5>
+      <h5>
+        <strong>ISBN-10: </strong>
+        <span><h6 class="view-request-h6">{{request.isbn}}</h6></span>
+      </h5>
+      <div class="view-request-button-container">
+        <button
+          id="view-request-add-button"
+          class="view-request-add-button"
+          onclick="location.href = './addbook'"
+        >
+          Add
+        </button>
+      </div>
     </div>
+    {% endfor %}
+  </div>
 </section>
 {% endblock %}
