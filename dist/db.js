@@ -16,7 +16,7 @@ const sqlite3_1 = __importDefault(require("sqlite3"));
 const sqlite_1 = __importDefault(require("sqlite"));
 const sql_template_strings_1 = __importDefault(require("sql-template-strings"));
 const connectToDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield sqlite_1.default.open({
+    return yield sqlite_1.open({
         filename: './library.db',
         driver: sqlite3_1.default.Database
     });

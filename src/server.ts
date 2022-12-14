@@ -172,7 +172,8 @@ app.get('/bookmarks', async (req: Request, res: Response) => {
     const user_id = Number(req.session.user_id);
     const books = await db.getSavedBooks(user_id); //get the book isbn's 
     const bookInfo = await db.getBooks(books); // get the book infos
-    res.render('bookmark.html', { books: bookInfo });
+    res.render('bookmark.html', { books: bookInfo, username: req.session.username, admin:req.session.admin});
+
 });
 
 // get reviews about a book
@@ -247,9 +248,11 @@ app.get('/book/:book_isbn/reading', async (req: Request, res: Response) => {
 app.post('/search', async (req: Request, res: Response) => {
     const searchTerm = req.body.term;
     if (searchTerm) {
+        console.log(searchTerm);
         const isbns = await db.searchBookByTerm(searchTerm);
+        console.log(isbns);
         const books = await db.getBooks(isbns);
-        res.render('search.html', {term:searchTerm, books: books });
+        res.render('search.html', {term:searchTerm, books: books, username: req.session?.username, admin:req.session?.admin });
     } else {
         res.status(400).send('Bad request');
     }
@@ -267,7 +270,7 @@ app.get('/request', async (req: Request, res: Response) => {
         res.redirect('/login');
         return;
     }
-    res.render('request.html');
+    res.render('request.html',{username: req.session.username, admin:req.session.admin});
 }); 
 
 // post book request form
@@ -295,7 +298,7 @@ app.get('/requests', async (req: Request, res: Response) => {
         return;
     }
     const requests = await db.getRequests(req.body.status);
-    res.render('view_requests.html', { requests });
+    res.render('view_request.html', { requests, username: req.session.username, admin:req.session.admin});
 });
 
 // admin update a request
@@ -323,7 +326,7 @@ app.get('/addbook', async (req: Request, res: Response) => {
         res.status(403).send('this page is not for you friend');
         return;
     }
-    res.render('addBook.html');
+    res.render('addBook.html', { username: req.session.username, admin:req.session.admin });
 });
 
 // admin add book
@@ -342,8 +345,8 @@ app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), async 
     console.log(req.session.user_id);
 
     try {
-        const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
-        const book = await db.addBook(Number(isbn), title, req.session.user_id as number, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
+        const { isbn, title, authors, subject, language, publisher, description, release_date } = req.body;
+        const book = await db.addBook(Number(isbn), title, req.session.user_id as number, String(isbn) + '.pdf', authors, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
         res.render('success.html', {operation:"Book added Successfully", canagain:true, again:"/addbook", }); //? maybe add a page that tells the admin that the book has been added?
     } catch (error) {
         console.log(error);

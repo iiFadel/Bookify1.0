@@ -49,12 +49,16 @@
           aria-label="Search"
         />
       </form>
+      {% if username %}
+      <a class="nav-link">{{username}}</a>
+      {% else %}
       <button
         class="btn log-in-btn-nav pe-4 ps-4"
         onclick="location.href='/login'"
       >
         LOG IN
       </button>
+    {% endif %}
     </div>
   </div>
 </nav>

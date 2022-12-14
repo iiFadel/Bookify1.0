@@ -172,7 +172,7 @@ app.get('/bookmarks', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const user_id = Number(req.session.user_id);
     const books = yield db_1.default.getSavedBooks(user_id); //get the book isbn's 
     const bookInfo = yield db_1.default.getBooks(books); // get the book infos
-    res.render('bookmark.html', { books: bookInfo });
+    res.render('bookmark.html', { books: bookInfo, username: req.session.username, admin: req.session.admin });
 }));
 // get reviews about a book
 app.get('/book/:book_isbn/reviews', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -240,11 +240,13 @@ app.get('/book/:book_isbn/reading', (req, res) => __awaiter(void 0, void 0, void
 // });
 // post search form
 app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _l, _m;
     const searchTerm = req.body.term;
     if (searchTerm) {
         const isbns = yield db_1.default.searchBookByTerm(searchTerm);
+        console.log(isbns);
         const books = yield db_1.default.getBooks(isbns);
-        res.render('search.html', { term: searchTerm, books: books });
+        res.render('search.html', { term: searchTerm, books: books, username: (_l = req.session) === null || _l === void 0 ? void 0 : _l.username, admin: (_m = req.session) === null || _m === void 0 ? void 0 : _m.admin });
     }
     else {
         res.status(400).send('Bad request');
@@ -253,26 +255,26 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 //** Requests **//
 // book request form
 app.get('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _l, _m;
-    if ((_l = req.session) === null || _l === void 0 ? void 0 : _l.admin) {
-        res.status(403).send('Admins cannot request books');
-        return;
-    }
-    if (!((_m = req.session) === null || _m === void 0 ? void 0 : _m.user_id)) {
-        res.redirect('/login');
-        return;
-    }
-    res.render('request.html');
-}));
-// post book request form
-// form should include title and a short letter
-app.post('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _o, _p;
     if ((_o = req.session) === null || _o === void 0 ? void 0 : _o.admin) {
         res.status(403).send('Admins cannot request books');
         return;
     }
-    else if (!((_p = req.session) === null || _p === void 0 ? void 0 : _p.user_id)) {
+    if (!((_p = req.session) === null || _p === void 0 ? void 0 : _p.user_id)) {
+        res.redirect('/login');
+        return;
+    }
+    res.render('request.html', { username: req.session.username, admin: req.session.admin });
+}));
+// post book request form
+// form should include title and a short letter
+app.post('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _q, _r;
+    if ((_q = req.session) === null || _q === void 0 ? void 0 : _q.admin) {
+        res.status(403).send('Admins cannot request books');
+        return;
+    }
+    else if (!((_r = req.session) === null || _r === void 0 ? void 0 : _r.user_id)) {
         res.redirect('/login');
         return;
     }
@@ -289,7 +291,7 @@ app.get('/requests', (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return;
     }
     const requests = yield db_1.default.getRequests(req.body.status);
-    res.render('view_requests.html', { requests });
+    res.render('view_request.html', { requests, username: req.session.username, admin: req.session.admin });
 }));
 // admin update a request
 // include status and request_id in the body
@@ -316,14 +318,14 @@ app.get('/addbook', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(403).send('this page is not for you friend');
         return;
     }
-    res.render('addBook.html');
+    res.render('addBook.html', { username: req.session.username, admin: req.session.admin });
 }));
 // admin add book
 // Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
 // the field name for the pdf file and the image MUST be "pdf" and "cover" respectively
 app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _q;
-    if (!((_q = req.session) === null || _q === void 0 ? void 0 : _q.admin)) {
+    var _s;
+    if (!((_s = req.session) === null || _s === void 0 ? void 0 : _s.admin)) {
         res.status(403).send('this page is not for you friend');
         return;
     }
@@ -334,8 +336,8 @@ app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), (req, 
     const files = req.files;
     console.log(req.session.user_id);
     try {
-        const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
-        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
+        const { isbn, title, authors, subject, language, publisher, description, release_date } = req.body;
+        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', authors, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
         res.render('success.html', { operation: "Book added Successfully", canagain: true, again: "/addbook", }); //? maybe add a page that tells the admin that the book has been added?
     }
     catch (error) {
