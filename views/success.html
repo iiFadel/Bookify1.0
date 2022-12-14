@@ -1,0 +1,10 @@
+{% extends "layout.html"%}
+{% block title %}Success{% endblock %}
+{% block content %}
+<section class="view-info-section">
+    <h1>{{operation}}</h1>
+    {% if canagain %}
+    <a href="{{again}}">One more</a>
+</section>
+{% endif %}
+{% endblock %}

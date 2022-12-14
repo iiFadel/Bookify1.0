@@ -39,16 +39,19 @@ const storage = multer_1.default.diskStorage({
         cb(null, 'public/' + file.fieldname);
     },
     filename: function (req, file, cb) {
-        cb(null, req.body.isbn + file.originalname.split('.').pop());
+        cb(null, req.body.isbn + '.' + file.originalname.split('.').pop());
     }
 });
 const upload = (0, multer_1.default)({ storage: storage });
 //**** ROUTES ****//
 // root
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.username) {
-        res.render('index.html', { signedIn: true, username: req.session.username }); // render logged in version
+    var _a, _b;
+    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.admin) {
+        res.render('index.html', { signedIn: true, username: req.session.username, admin: true }); // render admin version
+    }
+    else if ((_b = req.session) === null || _b === void 0 ? void 0 : _b.username) {
+        res.render('index.html', { signedIn: true, username: req.session.username, admin: false }); // render logged in version
     }
     else {
         res.render('index.html', { signedIn: false }); // render logged out version
@@ -57,8 +60,8 @@ app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 //** login/register **//
 // register
 app.get('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
-    if ((_b = req.session) === null || _b === void 0 ? void 0 : _b.username) {
+    var _c;
+    if ((_c = req.session) === null || _c === void 0 ? void 0 : _c.username) {
         res.redirect('/');
     }
     else {
@@ -86,8 +89,8 @@ app.post('/register', (0, validation_1.validate)([validation_1.newUsernameSchema
 }));
 // login
 app.get('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
-    if ((_c = req.session) === null || _c === void 0 ? void 0 : _c.username) {
+    var _d;
+    if ((_d = req.session) === null || _d === void 0 ? void 0 : _d.username) {
         res.redirect('/');
     }
     else {
@@ -95,9 +98,10 @@ app.get('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 }));
 app.post('/login', validation_1.sanitizePassword, validation_1.sanitizeUsername, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d;
-    if ((_d = req.session) === null || _d === void 0 ? void 0 : _d.username) {
+    var _e;
+    if ((_e = req.session) === null || _e === void 0 ? void 0 : _e.username) {
         res.redirect('/');
+        return;
     }
     const { username, password } = req.body;
     // check if user exists
@@ -116,12 +120,14 @@ app.post('/login', validation_1.sanitizePassword, validation_1.sanitizeUsername,
     }
     // check if user is an admin
     const admin = yield db_1.default.getAdmin(username);
+    console.log(admin);
+    console.log(username);
     if (admin) {
         // const match = await bcrypt.compare(password, admin.password);
         if (password == admin.password) {
             // initialize session
             req.session.username = admin.username;
-            req.session.user_id = admin.user_id;
+            req.session.user_id = admin.admin_id;
             req.session.admin = true;
             res.redirect('/');
             return;
@@ -131,9 +137,10 @@ app.post('/login', validation_1.sanitizePassword, validation_1.sanitizeUsername,
 }));
 // logout
 app.get('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e;
-    if (!((_e = req.session) === null || _e === void 0 ? void 0 : _e.username)) {
+    var _f;
+    if (!((_f = req.session) === null || _f === void 0 ? void 0 : _f.username)) {
         res.redirect('/');
+        return;
     }
     req.session.destroy((err) => {
         if (err) {
@@ -153,12 +160,12 @@ app.get('/book/:book_isbn', (req, res) => __awaiter(void 0, void 0, void 0, func
 }));
 // get saved books page
 app.get('/bookmarks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f, _g;
-    if ((_f = req.session) === null || _f === void 0 ? void 0 : _f.admin) {
+    var _g, _h;
+    if ((_g = req.session) === null || _g === void 0 ? void 0 : _g.admin) {
         res.status(403).send('Admins cannot have saved books');
         return;
     }
-    if (!((_g = req.session) === null || _g === void 0 ? void 0 : _g.user_id)) {
+    if (!((_h = req.session) === null || _h === void 0 ? void 0 : _h.user_id)) {
         res.redirect('/login');
         return;
     }
@@ -175,14 +182,16 @@ app.get('/book/:book_isbn/reviews', (req, res) => __awaiter(void 0, void 0, void
 }));
 // add a review about a book
 app.post('/book/:book_isbn/reviews', (0, validation_1.validate)([validation_1.commentSchema]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _h, _j;
+    var _j, _k;
     // dont accept reviews from admins
-    if ((_h = req.session) === null || _h === void 0 ? void 0 : _h.admin) {
+    if ((_j = req.session) === null || _j === void 0 ? void 0 : _j.admin) {
         res.status(403).send('Admins cannot review books');
+        return;
     }
     // check if user is logged in
-    if (!((_j = req.session) === null || _j === void 0 ? void 0 : _j.user_id)) {
+    if (!((_k = req.session) === null || _k === void 0 ? void 0 : _k.user_id)) {
         res.redirect('/login');
+        return;
     }
     const book_isbn = Number(req.params.book_isbn);
     const comment = req.body.comment;
@@ -244,12 +253,12 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 //** Requests **//
 // book request form
 app.get('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _k, _l;
-    if ((_k = req.session) === null || _k === void 0 ? void 0 : _k.admin) {
+    var _l, _m;
+    if ((_l = req.session) === null || _l === void 0 ? void 0 : _l.admin) {
         res.status(403).send('Admins cannot request books');
         return;
     }
-    if (!((_l = req.session) === null || _l === void 0 ? void 0 : _l.user_id)) {
+    if (!((_m = req.session) === null || _m === void 0 ? void 0 : _m.user_id)) {
         res.redirect('/login');
         return;
     }
@@ -258,12 +267,12 @@ app.get('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 // post book request form
 // form should include title and a short letter
 app.post('/request', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _m, _o;
-    if ((_m = req.session) === null || _m === void 0 ? void 0 : _m.admin) {
+    var _o, _p;
+    if ((_o = req.session) === null || _o === void 0 ? void 0 : _o.admin) {
         res.status(403).send('Admins cannot request books');
         return;
     }
-    else if (!((_o = req.session) === null || _o === void 0 ? void 0 : _o.user_id)) {
+    else if (!((_p = req.session) === null || _p === void 0 ? void 0 : _p.user_id)) {
         res.redirect('/login');
         return;
     }
@@ -311,9 +320,10 @@ app.get('/addbook', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 // admin add book
 // Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
-// the field name for the pdf file and the image MUST be "pdf" and "image" respectively
+// the field name for the pdf file and the image MUST be "pdf" and "cover" respectively
 app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.session.admin || !req.session.user_id) {
+    var _q;
+    if (!((_q = req.session) === null || _q === void 0 ? void 0 : _q.admin)) {
         res.status(403).send('this page is not for you friend');
         return;
     }
@@ -322,10 +332,11 @@ app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), (req, 
         return;
     }
     const files = req.files;
+    console.log(req.session.user_id);
     try {
         const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
-        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + files['image'][0].originalname.split('.').pop(), release_date);
-        res.send(JSON.stringify(book)); //? maybe add a page that tells the admin that the book has been added?
+        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
+        res.render('success.html', { operation: "Book added Successfully", canagain: true, again: "/addbook", }); //? maybe add a page that tells the admin that the book has been added?
     }
     catch (error) {
         console.log(error);
@@ -343,8 +354,8 @@ app.get('/updatebook/:book_isbn', (req, res) => __awaiter(void 0, void 0, void 0
 }));
 // admin update book
 // Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
-// the field name for the pdf file and the image MUST be "pdf" and "image" respectively
-app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'image' }]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// the field name for the pdf file and the image MUST be "pdf" and "cover" respectively
+app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.session.admin || !req.session.user_id) {
         res.status(403).send('this page is not for you friend');
         return;
@@ -357,7 +368,7 @@ app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'image
     try {
         yield db_1.default.removeBook(Number(req.params.book_isbn));
         const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
-        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + files['image'][0].originalname.split('.').pop(), release_date);
+        const book = yield db_1.default.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
         res.send(JSON.stringify(book));
     }
     catch (error) {

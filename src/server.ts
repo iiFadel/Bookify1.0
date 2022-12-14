@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
         cb(null, 'public/' + file.fieldname);
     },
     filename: function (req, file, cb) {
-        cb(null, req.body.isbn + file.originalname.split('.').pop());
+        cb(null, req.body.isbn + '.' + file.originalname.split('.').pop());
     }
 });
 const upload = multer({ storage: storage })
@@ -47,10 +47,12 @@ const upload = multer({ storage: storage })
 //**** ROUTES ****//
 // root
 app.get('/', async (req: Request, res: Response) => {
-    if (req.session?.username) {
-        res.render('index.html', { signedIn: true, username: req.session.username }); // render logged in version
+    if (req.session?.admin) {
+        res.render('index.html', { signedIn: true, username: req.session.username, admin:true }); // render admin version
+    } else if (req.session?.username) {
+        res.render('index.html', { signedIn: true, username: req.session.username, admin:false }); // render logged in version
     } else {
-        res.render('index.html', { signedIn: false }); // render logged out version
+        res.render('index.html', { signedIn: false}); // render logged out version
     }
 });
 
@@ -95,6 +97,7 @@ app.get('/login', async (req: Request, res: Response) => {
 app.post('/login', sanitizePassword, sanitizeUsername, async (req: Request, res: Response) => {
     if (req.session?.username) {
         res.redirect('/');
+        return;
     }
     const { username, password } = req.body;
     // check if user exists
@@ -115,12 +118,15 @@ app.post('/login', sanitizePassword, sanitizeUsername, async (req: Request, res:
     }
     // check if user is an admin
     const admin = await db.getAdmin(username);
+    console.log(admin);
+    console.log(username);
+    
     if (admin) {
         // const match = await bcrypt.compare(password, admin.password);
         if (password == admin.password) {
             // initialize session
             req.session.username = admin.username;
-            req.session.user_id = admin.user_id;
+            req.session.user_id = admin.admin_id;
             req.session.admin = true;
             res.redirect('/');
             return;
@@ -134,6 +140,7 @@ app.post('/login', sanitizePassword, sanitizeUsername, async (req: Request, res:
 app.get('/logout', async (req: Request, res: Response) => {
     if (!req.session?.username) {
         res.redirect('/');
+        return;
     }
     req.session.destroy((err) => {
         if (err) {
@@ -180,11 +187,12 @@ app.post('/book/:book_isbn/reviews', validate([commentSchema]), async (req: Requ
     // dont accept reviews from admins
     if (req.session?.admin) {
         res.status(403).send('Admins cannot review books');
+        return;
     }
-
     // check if user is logged in
     if (!req.session?.user_id) {
         res.redirect('/login');
+        return;
     }
     const book_isbn = Number(req.params.book_isbn);
     const comment = req.body.comment;
@@ -320,9 +328,9 @@ app.get('/addbook', async (req: Request, res: Response) => {
 
 // admin add book
 // Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
-// the field name for the pdf file and the image MUST be "pdf" and "image" respectively
+// the field name for the pdf file and the image MUST be "pdf" and "cover" respectively
 app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), async (req: Request, res: Response) => {
-    if (!req.session.admin || !req.session.user_id) {
+    if (!req.session?.admin) {
         res.status(403).send('this page is not for you friend');
         return;
     }
@@ -331,11 +339,12 @@ app.post('/addbook', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), async 
         return;
     }
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    console.log(req.session.user_id);
 
     try {
         const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
-        const book = await db.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + files['image'][0].originalname.split('.').pop(), release_date);
-        res.send(JSON.stringify(book)); //? maybe add a page that tells the admin that the book has been added?
+        const book = await db.addBook(Number(isbn), title, req.session.user_id as number, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
+        res.render('success.html', {operation:"Book added Successfully", canagain:true, again:"/addbook", }); //? maybe add a page that tells the admin that the book has been added?
     } catch (error) {
         console.log(error);
         res.status(400).send('bad request');
@@ -355,8 +364,8 @@ app.get('/updatebook/:book_isbn', async (req: Request, res: Response) => {
 
 // admin update book
 // Don't forget the enctype="multipart/form-data" in your form https://www.npmjs.com/package/multer
-// the field name for the pdf file and the image MUST be "pdf" and "image" respectively
-app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'image' }]), async (req: Request, res: Response) => {
+// the field name for the pdf file and the image MUST be "pdf" and "cover" respectively
+app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'cover' }]), async (req: Request, res: Response) => {
     if (!req.session.admin || !req.session.user_id) {
         res.status(403).send('this page is not for you friend');
         return;
@@ -370,7 +379,7 @@ app.put('/updatebook/:book_isbn', upload.fields([{ name: 'pdf' }, { name: 'image
     try {
         await db.removeBook(Number(req.params.book_isbn));
         const { isbn, title, author, subject, language, publisher, description, release_date } = req.body;
-        const book = await db.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + files['image'][0].originalname.split('.').pop(), release_date);
+        const book = await db.addBook(Number(isbn), title, req.session.user_id, String(isbn) + '.pdf', author, description, publisher, subject, language, String(isbn) + '.' + files['cover'][0].originalname.split('.').pop(), release_date);
         res.send(JSON.stringify(book));
     } catch (error) {
         console.log(error);
